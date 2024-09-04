@@ -38,7 +38,7 @@ ylabel('Distance', 'Interpreter', 'latex')
 
 % Step 4: Create clusters from the linkage result
 numClusters = 7;  % Define the number of clusters you want, adjust as needed
-Distance = 14;
+Distance = 19;
 %clusters = cluster(Z, 'maxclust', numClusters);
 clusters = cluster(Z, 'cutoff',Distance,'criterion','distance');
 h = yline(Distance,'r--',['Threshold = ',num2str(Distance)]);

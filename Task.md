@@ -92,7 +92,8 @@
     - Compare the FRF of Acc measuremnt and FRF formed by superposition of 2 DOF system. 
     - Using OMA technique.
     - Using [SINGLE-SENSOR system identification method](/MATLAB/Lib/ECheynet-modalID_singleSensor-b67ee9f/) technique to extract the first two natural frequencies and damping ratios, after that, forming the FRF of SDOF system based on each natural frequencies and damping ratio, then superposite them. 
-    - Conclusion: similar natural frequencies but differnet amplitude and coverd energey, meaning the damping ratio detected are different (bad estimation of damping ratio)
+    - Conclusion: similar natural frequencies but differnet amplitude and coverd energey, meaning the damping ratio detected are different (bad estimation of damping ratio) 
+
 
 10. Forming FRFs: [Main_EMA_SI_FRF_form_ACC_Measure_1OG_Z.m](/MATLAB/Main/Main_EMA_SI_FRF_form_ACC_Measure_1OG_Z.m)
     - Using EMA technique.
@@ -113,7 +114,12 @@
     - ~~Default: 15 clusters for no reason -> might need to find a better way to distiguish the number of cluster we want.~~
     - Using distance as the threshold to determine how many cluster we need, but still, might need to find a better way to distiguish the number of cluster we want.~~ 
   
-    - Current result: 
+
+
+
+## Current result: 
+  #### Clustering using hierarchical cluster(HC): [Main_clustering_test_HC_2.m](/MATLAB/Main/Main_clustering_test_HC_2.m)
+  - First trail 
   ![HCtree](/FIG/MATLAB_FIG/HC_tree.svg)
   ![C1](/FIG/MATLAB_FIG/C1.svg)
   ![C2](/FIG/MATLAB_FIG/C2.svg)
@@ -123,6 +129,16 @@
   ![C6](/FIG/MATLAB_FIG/C6.svg)
   ![C7](/FIG/MATLAB_FIG/C7.svg)
   ![C8](/FIG/MATLAB_FIG/C8.svg)
+
+  - Second trial
+  ![HCtree_2](/FIG/MATLAB_FIG/HC_tree19.svg)
+  ![C1_2](/FIG/MATLAB_FIG/C1_19.svg)
+  ![C2_2](/FIG/MATLAB_FIG/C2_19.svg)
+  ![C3_2](/FIG/MATLAB_FIG/C3_19.svg)
+  ![C4_2](/FIG/MATLAB_FIG/C4_19.svg)
+  ![C5_2](/FIG/MATLAB_FIG/C5_19.svg)
+
+
 
 
 
