@@ -107,10 +107,25 @@
 11. Clustering using hierarchical cluster(HC): [Main_clustering_test_HC_2.m](/MATLAB/Main/Main_clustering_test_HC_2.m)
     - Focus on the Menhir data in z dir, 1 O.G. $N$ = 1528
     - Using hierarchical cluster methd (linkage)
-    - Better than DBSCAN in mu opinion. 
-    - Ignore the cluster that the number of events include is smaller than 50 (${N_{remain} = 1365}$  ).
+    - Better than DBSCAN in my opinion. 
+    - ~~Ignore the cluster that the number of events include is smaller than 50.~~
     - Based on move-mean normalized signal ([0,1]), meaning that here I only care about the shape, however the aplitudes are not considered well here. 
-    - Default: 15 clusters for no reason -> might need to find a better way to distiguish the number of cluster we want. 
+    - ~~Default: 15 clusters for no reason -> might need to find a better way to distiguish the number of cluster we want.~~
+    - Using distance as the threshold to determine how many cluster we need, but still, might need to find a better way to distiguish the number of cluster we want.~~ 
+  
+    - Current result: 
+  ![HCtree](/FIG/MATLAB_FIG/HC_tree.svg)
+  ![C1](/FIG/MATLAB_FIG/C1.svg)
+  ![C2](/FIG/MATLAB_FIG/C2.svg)
+  ![C3](/FIG/MATLAB_FIG/C3.svg)
+  ![C4](/FIG/MATLAB_FIG/C4.svg)
+  ![C5](/FIG/MATLAB_FIG/C5.svg)
+  ![C6](/FIG/MATLAB_FIG/C6.svg)
+  ![C7](/FIG/MATLAB_FIG/C7.svg)
+  ![C8](/FIG/MATLAB_FIG/C8.svg)
+
+
+
 
 
 
