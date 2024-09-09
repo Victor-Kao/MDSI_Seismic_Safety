@@ -105,7 +105,7 @@
   
 
 #### Clustering (03.09.2024)
-11. Clustering using hierarchical cluster(HC): [Main_clustering_test_HC_2.m](/MATLAB/Main/Main_clustering_test_HC_2.m)
+11. Clustering using hierarchical cluster(HC): [Main_clustering_test_HC_1.m](/MATLAB/Main/Main_clustering_test_HC_1.m)
     - Focus on the Menhir data in z dir, 1 O.G. $N$ = 1528
     - Using hierarchical cluster methd (linkage)
     - Better than DBSCAN in my opinion. 
@@ -113,12 +113,17 @@
     - Based on move-mean normalized signal ([0,1]), meaning that here I only care about the shape, however the aplitudes are not considered well here. 
     - ~~Default: 15 clusters for no reason -> might need to find a better way to distiguish the number of cluster we want.~~
     - Using distance as the threshold to determine how many cluster we need, but still, might need to find a better way to distiguish the number of cluster we want.~~ 
+
+12. Clustering using hierarchical cluster(HC): [Main_clustering_test_HC_2.m](/MATLAB/Main/Main_clustering_test_HC_2.m)
+    - Focus only on the events from Menhir that the sensors in 1G2G or all the sensors are activated at the same time, I assumed this is due to ground motions, $N$ = 107.
+    - The result shows that the singal after appr. 17 Hz are vanished 
+    - Apparent Peak at appr. 11.5~12.5 hz 
+    - All the result looks similar.
   
 
 
-
 ## Current result: 
-  #### Clustering using hierarchical cluster(HC): [Main_clustering_test_HC_2.m](/MATLAB/Main/Main_clustering_test_HC_2.m)
+  #### Clustering using hierarchical cluster(HC): [Main_clustering_test_HC_1.m](/MATLAB/Main/Main_clustering_test_HC_1.m)
   - First trail 
   ![HCtree](/FIG/MATLAB_FIG/HC_tree.svg)
   ![C1](/FIG/MATLAB_FIG/C1.svg)
@@ -137,6 +142,19 @@
   ![C3_2](/FIG/MATLAB_FIG/C3_19.svg)
   ![C4_2](/FIG/MATLAB_FIG/C4_19.svg)
   ![C5_2](/FIG/MATLAB_FIG/C5_19.svg)
+
+  #### Clustering using hierarchical cluster(HC): [Main_clustering_test_HC_2.m](/MATLAB/Main/Main_clustering_test_HC_2.m)
+  - Threshold: Distance = 2.9
+  - Events from 1G2G, all sensors are activated.
+  ![HCtree_2_case2](/FIG/MATLAB_FIG/HC_tree_case2.svg)
+  ![C1_2_case2](/FIG/MATLAB_FIG/C1_case2.svg)
+  ![C2_2_case2](/FIG/MATLAB_FIG/C2_case2.svg)
+  ![C3_2_case2](/FIG/MATLAB_FIG/C3_case2.svg)
+  ![C4_2_case2](/FIG/MATLAB_FIG/C4_case2.svg)
+
+
+
+
 
 
 

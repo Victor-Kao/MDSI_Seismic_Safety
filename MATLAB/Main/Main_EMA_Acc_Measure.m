@@ -14,6 +14,8 @@ low_freq = 2;
 high_freq = 100;
 [b,a] = Func_FilterDesign(low_freq,high_freq,4,1024);
 
+
+k = 1;
 figure
 for i_file = 1:length(mat_tile_list)
     if ismember(i_file, list_a)
@@ -54,6 +56,11 @@ for i_file = 1:length(mat_tile_list)
     % Plot the Frequency Response Function (FRF)
     subplot(3,1,2);
     plot(f, abs(FRF));
+    
+  
+    FRF_all(k,:) = abs(FRF);
+    k = k +1;
+
     title('Frequency Response Function (FRF)');
     xlabel('Frequency (Hz)');
     ylabel('Magnitude');
@@ -71,3 +78,7 @@ for i_file = 1:length(mat_tile_list)
     xlim([low_freq,high_freq])
     hold on
 end
+
+
+[l,p] = Func_ConfiPlot(FRF_all,f,1);
+xlim([low_freq,high_freq])

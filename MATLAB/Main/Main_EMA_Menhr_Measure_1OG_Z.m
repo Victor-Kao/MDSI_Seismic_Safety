@@ -16,6 +16,7 @@ low_freq = 2;
 high_freq = 100;
 [b,a] = Func_FilterDesign(low_freq,high_freq,4,1024);
 
+k = 1;
 figure
 for i_file = 1:13
     if ismember(i_file, list_a)
@@ -90,6 +91,9 @@ for i_file = 1:13
     ylabel('Magnitude');
     xlim([low_freq,high_freq])
     hold on
+
+    FRF_all(k,:) = vz_psd;
+    k = k +1;
     
     %% Plot the coherence between input and output signals
     subplot(3,1,3);
@@ -101,3 +105,5 @@ for i_file = 1:13
     xlim([low_freq,high_freq])
     hold on
 end
+[l,p] = Func_ConfiPlot(FRF_all,v_freq_psd,1);
+xlim([low_freq,high_freq])
