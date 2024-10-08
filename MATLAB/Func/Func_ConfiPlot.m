@@ -30,15 +30,19 @@ end
 if plot_
     figure;   
     % Plot the confidence interval as a shaded area
-    fill([x, fliplr(x)], [mean_signal + margin_of_error, fliplr(mean_signal - margin_of_error)], ...
-        'r', 'FaceAlpha', 0.3, 'EdgeColor', 'none');
+    plot(x, mean_signal,'k', 'LineWidth', 1); 
     hold on 
 
-    plot(x, mean_signal,'k', 'LineWidth', 2);  % Plot the mean signal
+    fill([x, fliplr(x)], [mean_signal + margin_of_error, fliplr(mean_signal - margin_of_error)], ...
+        'r', 'FaceAlpha', 0.3, 'EdgeColor', 'none');
     
-    xlabel('Data Points');
-    ylabel('Amplitude');
-    title('Mean Signal with 95% Confidence Interval');
+    plot(x, mean_signal,'k', 'LineWidth', 1);  % Plot the mean signal
+    legend({'FRF','95\% Confidence Interval'}, 'Interpreter', 'latex','FontSize',14);
+    
+    xlabel('Freq (Hz)', 'Interpreter', 'latex','FontSize',14);
+    ylabel('Magnitude', 'Interpreter', 'latex','FontSize',14);
+    title('Frequency Response Function (FRF)', 'Interpreter', 'latex','FontSize',14);
+    grid on
     hold off 
 end
 

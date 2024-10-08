@@ -20,20 +20,20 @@ for i_file = 1:length(mat_tile_list)
         continue
     end
     load(mat_tile_list{i_file});
-    outputSignal = data_T.Z_mm_s_GM_1_all;
+    outputSignal = data_T.X_mm_s_GM_1_all;
     
     outputSignal = filtfilt(b, a, outputSignal);
-    inputSingal = data_T.Z_mm_s_GM_0_all;
+    inputSingal = data_T.X_mm_s_GM_0_all;
     %inputSingal = filtfilt(b, a, inputSingal);
 
-    out_S_f = Func_FFT_half(transpose(outputSignal),1000);
-    in_S_f = Func_FFT_half(transpose(inputSingal),1000);
+    %out_S_f = Func_FFT_half(transpose(outputSignal),5000,1000);
+    %in_S_f = Func_FFT_half(transpose(inputSingal),5000,1000);
 
     %out_S_f.s = movmean(out_S_f.s,20);
     %in_S_f.s = movmean(in_S_f.s,20);
     %FRF_fft = out_S_f.s./in_S_f.s;
 
-    res_Men = Func_PSD_FRF_COH(inputSingal,outputSignal,[],[],[],1000);
+    res_Men = Func_PSD_FRF_COH(inputSingal,outputSignal,[],[],5000,1000);
     
     subplot(3,1,1);
     plot(res_Men.f, 10*log10(res_Men.Pxx_in),"Color",'r');
@@ -48,7 +48,7 @@ for i_file = 1:length(mat_tile_list)
     
     % Plot the Frequency res_Menponse Function (FRF)
     subplot(3,1,2);
-    plot(res_Men.f, abs(res_Men.FRF)/max(abs(res_Men.FRF)));
+    plot(res_Men.f, abs(res_Men.FRF));
     hold on
     title('Frequency resenponse Function (FRF)');
     xlabel('Frequency (Hz)');

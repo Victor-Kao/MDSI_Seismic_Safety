@@ -1,0 +1,16 @@
+*IF,bool_SSI,EQ,1,then
+    ! Consider the SSI
+    NSEL,S,NODE,,foundation_node
+    D,foundation_node,rotx,0
+    D,foundation_node,roty,0
+    D,foundation_node,rotz,0
+    ! Please apply the displacement on foundation_node
+*ELSE
+    ! Not consider the SSI
+    NSEL,S,NODE,,ground_node
+    D,ground_node,rotx,0
+    D,ground_node,roty,0
+    D,ground_node,rotz,0
+    ! Please apply the displacement on ground_node
+    NSEL,ALL
+*ENDIF

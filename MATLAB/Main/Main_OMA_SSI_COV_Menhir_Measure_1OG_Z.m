@@ -19,7 +19,7 @@ low_freq = 2; % Lower cutoff frequency (40 Hz)
 high_freq = 100; % Upper cutoff frequency (60 Hz)
 filterOrder = 4; % Filter order
 
-[b,a] = Func_FilterDesign(low_freq,high_freq,filterOrder,1000);
+[b,a] = Func_FilterDesign_highlow('high',40,2,1000);
 i_file = 20;
 
 load(mat_tile_list{i_file});

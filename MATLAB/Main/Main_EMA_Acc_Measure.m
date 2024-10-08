@@ -1,6 +1,6 @@
 clear;
 clc;
-%close all;
+close all;
 
 addpath("D:\MDSI_project\MATLAB\Func");
 
@@ -17,7 +17,8 @@ high_freq = 100;
 
 k = 1;
 figure
-for i_file = 1:length(mat_tile_list)
+sgtitle('EMA using Impact Hammer ', 'Interpreter', 'latex','FontSize',25)
+for i_file = 4:6%length(mat_tile_list)
     if ismember(i_file, list_a)
         continue
     end
@@ -41,39 +42,43 @@ for i_file = 1:length(mat_tile_list)
     % Compute the coherence between input and output signals
     [Cxy, f] = mscohere(inputSignal, outputSignal, [], [], [], fs);
     
+    res_Men = Func_PSD_FRF_COH(inputSignal, outputSignal,[],[],5000,1024);
+
     % Plot the PSD of input and output signals
     %figure;
     subplot(3,1,1);
-    plot(f, 10*log10(pxxInput));
+    plot(res_Men.f, 20*log10(res_Men.Pxx_in),"Color",'r');
     hold on;
-    plot(f, 10*log10(pxxOutput));
-    title('Power Spectral Density (PSD)');
-    xlabel('Frequency (Hz)');
-    ylabel('Power/Frequency (dB/Hz)');
-    legend('Input Signal', 'Output Signal');
+    plot(res_Men.f, 20*log10(res_Men.Pxx_out),"Color",'b');
+    title('Power Spectral Density $S_{x}(f)$', 'Interpreter', 'latex','FontSize',14);
+    xlabel('Freq (Hz)', 'Interpreter', 'latex','FontSize',14);
+    ylabel('$S_{x}(f)$(DB)', 'Interpreter', 'latex','FontSize',14);
+    legend('Excitation', 'Response', 'Interpreter', 'latex','FontSize',14);
     xlim([low_freq,high_freq])
     
     % Plot the Frequency Response Function (FRF)
     subplot(3,1,2);
-    plot(f, abs(FRF));
+    plot(res_Men.f, 20*log10(abs(res_Men.FRF)));
+    hold on
     
   
-    FRF_all(k,:) = abs(FRF);
+    FRF_all(k,:) = 20*log10(abs(FRF));
     k = k +1;
 
-    title('Frequency Response Function (FRF)');
-    xlabel('Frequency (Hz)');
-    ylabel('Magnitude');
+    title('Frequency Response Function (FRF)', 'Interpreter', 'latex','FontSize',14);
+    xlabel('Freq (Hz)', 'Interpreter', 'latex','FontSize',14);
+    ylabel('Magnitude', 'Interpreter', 'latex','FontSize',14);
     xlim([low_freq,high_freq])
     hold on
     
     % Plot the coherence between input and output signals
     subplot(3,1,3);
-    plot(f, Cxy);
+    %plot(out_S_f.f,abs(out_S_f.s)/max(abs(out_S_f.s)));
+    plot(res_Men.f, res_Men.Cxy);
     yline(0.9)
-    title('Coherence');
-    xlabel('Frequency (Hz)');
-    ylabel('Coherence');
+    title('Coherence', 'Interpreter', 'latex','FontSize',14);
+    xlabel('Freq (Hz)', 'Interpreter', 'latex','FontSize',14);
+    ylabel('Coherence', 'Interpreter', 'latex','FontSize',14);
     ylim([0 1]);
     xlim([low_freq,high_freq])
     hold on

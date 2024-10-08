@@ -1,0 +1,562 @@
+!/Clear,NOSTART
+
+!****************************Geometry*******************************!
+!Initialized  coord_x, coord_y
+num_kp = 54
+*DIM, coord_x, ARRAY, num_kp  ,1
+*DIM, coord_y, ARRAY, num_kp  ,1
+
+!Setting coord_x 
+!Index--------------------1-------2-------3-------4-------5-------6-------7-------8-------9------10
+*SET, coord_x(1,1) , 0.0000, 0.4400, 2.2100, 3.4100, 5.1800, 6.3800, 8.1500, 9.3500, 11.120, 12.320   
+*SET, coord_x(11,1), 14.092, 15.290, 17.060, 18.471, 17.584, 16.553, 15.799, 14.768, 14.014, 12.983
+*SET, coord_x(21,1), 12.398, 12.229, 11.199, 10.444, 9.4140, 8.9870, 8.6590, 7.6290, 7.2020, 5.5550
+*SET, coord_x(31,1), 4.4430, 3.1420, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 3.2600, 4.5900, 8.7900
+*SET, coord_x(41,1), 4.5900, 4.5900, 4.5900, 4.5900, 4.5900, 2.9230, 2.9230, 1.4700, 1.4700, 2.3600
+*SET, coord_x(51,1), 3.2600, 5.6620, 0.0000, 2.2100
+
+!Setting coord_y
+!Index--------------------1-------2-------3-------4-------5-------6-------7-------8-------9------10
+*SET, coord_y(1,1) , 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000
+*SET, coord_y(11,1), 0.0000, 0.0000, 0.0000, 0.0000, 1.0970, 2.3730, 3.3060, 4.5820, 5.5150, 6.7910  
+*SET, coord_y(21,1), 7.5150, 7.7240, 9.0000, 9.9330, 11.209, 11.737, 12.142, 13.418, 13.946, 15.984
+*SET, coord_y(31,1), 17.361, 18.970, 18.970, 16.120, 11.700, 10.450, 4.6000, 4.6000, 4.6000, 4.6000
+*SET, coord_y(41,1), 5.8500, 8.1850, 9.6100, 10.860, 11.836, 13.870, 16.120, 16.120, 13.870, 10.450
+*SET, coord_y(51,1), 9.3360, 8.9700, 13.870, 3.1000
+
+
+!/PREP7
+
+!height = 3.37
+!n_storeys = 3
+!elem_size = 0.4
+
+
+!bool_inner = 1
+!bool_stair = 1  !Both bool_inner = 1 and bool_stair = 1, then stair will be built
+!bool_SSI   = 1  !MATRIX27 soil-structure interection
+
+
+
+!************************* Creating keypoints **************************!
+*DO, i_storey, 0, n_storeys, 1 
+    *DO, i_kp, 1, num_kp , 1 
+        n_kp = i_storey*num_kp +  i_kp 
+        n_coor = i_kp
+        !
+        x_kp = coord_x(n_coor,1)
+        y_kp = coord_y(n_coor,1)
+        !
+        K,n_kp,x_kp,y_kp,i_storey*height
+        !
+    *ENDDO
+*ENDDO
+!
+! Keypoints For stairs
+!
+*DO, i_storey, 0, n_storeys-2, 1 
+    num_acc = ((n_storeys+1)*num_kp) + (i_storey*num_kp)
+    K, 1 + num_acc, 0.0000, 8.4500,11*(height/18) +(i_storey)*height
+    K, 2 + num_acc, 0.0000, 7.3750,11*(height/18) +(i_storey)*height
+    K, 3 + num_acc, 0.0000, 5.7500, 4*(height/18) +(i_storey)*height
+    K, 4 + num_acc, 0.0000, 4.6000, 4*(height/18) +(i_storey)*height
+    K, 5 + num_acc, 1.1500, 4.6000, 4*(height/18) +(i_storey)*height
+    K, 6 + num_acc, 1.9600, 4.6000,        0.0000 +(i_storey)*height
+    K, 7 + num_acc, 1.9600, 5.7500,        0.0000 +(i_storey)*height
+    K, 8 + num_acc, 1.1500, 5.7500, 4*(height/18) +(i_storey)*height
+    K, 9 + num_acc, 1.1500, 7.3750,11*(height/18) +(i_storey)*height
+    K,10 + num_acc, 1.1500, 8.4500,11*(height/18) +(i_storey)*height
+    K,11 + num_acc, 1.1500, 10.450,        height +(i_storey)*height
+    K,12 + num_acc, 3.2600, 5.7500,        0.0000 +(i_storey)*height
+*ENDDO
+
+!************************* Creating Slab **************************!
+!
+!Seperate the corridor and room
+!
+*DO, i_storey, 0, n_storeys, 1 
+    A_kp_1 = 34 + (i_storey*num_kp)
+    A_kp_2 = 53 + (i_storey*num_kp)
+    A_kp_3 = 49 + (i_storey*num_kp)
+    A_kp_4 = 48 + (i_storey*num_kp)
+    A, A_kp_1, A_kp_2, A_kp_3, A_kp_4
+    !
+    !
+    A_kp_1 = 31 + (i_storey*num_kp)
+    A_kp_2 = 32 + (i_storey*num_kp)
+    A_kp_3 = 33 + (i_storey*num_kp)
+    A_kp_4 = 34 + (i_storey*num_kp)
+    A_kp_5 = 48 + (i_storey*num_kp)
+    A_kp_6 = 47 + (i_storey*num_kp)
+    A, A_kp_1, A_kp_2, A_kp_3, A_kp_4, A_kp_5, A_kp_6
+    !
+    !
+    A_kp_1 = 30 + (i_storey*num_kp)
+    A_kp_2 = 31 + (i_storey*num_kp)
+    A_kp_3 = 47 + (i_storey*num_kp)
+    A_kp_4 = 48 + (i_storey*num_kp)
+    A_kp_5 = 49 + (i_storey*num_kp)
+    A_kp_6 = 46 + (i_storey*num_kp)
+    A, A_kp_1, A_kp_2, A_kp_3, A_kp_4, A_kp_5, A_kp_6
+    !
+    !
+    A_kp_1 = 21 + (i_storey*num_kp)
+    A_kp_2 = 22 + (i_storey*num_kp)
+    A_kp_3 = 23 + (i_storey*num_kp)
+    A_kp_4 = 24 + (i_storey*num_kp)
+    A_kp_5 = 25 + (i_storey*num_kp)
+    A_kp_6 = 26 + (i_storey*num_kp)
+    A_kp_7 = 27 + (i_storey*num_kp)
+    A_kp_8 = 28 + (i_storey*num_kp)
+    A_kp_9 = 29 + (i_storey*num_kp)
+    A_kp_10= 45 + (i_storey*num_kp)
+    A_kp_11= 44 + (i_storey*num_kp)
+    A_kp_12= 43 + (i_storey*num_kp)
+    A_kp_13= 42 + (i_storey*num_kp)
+    A_kp_14= 41 + (i_storey*num_kp)
+    A_kp_15= 39 + (i_storey*num_kp)
+    A_kp_16= 40 + (i_storey*num_kp)
+    A, A_kp_1, A_kp_2, A_kp_3, A_kp_4, A_kp_5, A_kp_6, A_kp_7, A_kp_8, A_kp_9, A_kp_10, A_kp_11, A_kp_12, A_kp_13, A_kp_14, A_kp_15, A_kp_16
+    !
+    !
+    A_kp_1 = 10 + (i_storey*num_kp)
+    A_kp_2 = 11 + (i_storey*num_kp)
+    A_kp_3 = 12 + (i_storey*num_kp)
+    A_kp_4 = 13 + (i_storey*num_kp)
+    A_kp_5 = 14 + (i_storey*num_kp)
+    A_kp_6 = 15 + (i_storey*num_kp)
+    A_kp_7 = 16 + (i_storey*num_kp)
+    A_kp_8 = 17 + (i_storey*num_kp)
+    A_kp_9 = 18 + (i_storey*num_kp)
+    A_kp_10= 19 + (i_storey*num_kp)
+    A_kp_11= 20 + (i_storey*num_kp)
+    A_kp_12= 21 + (i_storey*num_kp)
+    A_kp_13= 40 + (i_storey*num_kp)
+    A, A_kp_1, A_kp_2, A_kp_3, A_kp_4, A_kp_5, A_kp_6, A_kp_7, A_kp_8, A_kp_9, A_kp_10, A_kp_11, A_kp_12, A_kp_13
+    !
+    !
+    A_kp_1 = 1 + (i_storey*num_kp)
+    A_kp_2 = 2 + (i_storey*num_kp)
+    A_kp_3 = 3 + (i_storey*num_kp)
+    A_kp_4 = 4 + (i_storey*num_kp)
+    A_kp_5 = 5 + (i_storey*num_kp)
+    A_kp_6 = 6 + (i_storey*num_kp)
+    A_kp_7 = 7 + (i_storey*num_kp)
+    A_kp_8 = 8 + (i_storey*num_kp)
+    A_kp_9 = 9 + (i_storey*num_kp)
+    A_kp_10= 10 + (i_storey*num_kp)
+    A_kp_11= 40 + (i_storey*num_kp)
+    A_kp_12= 39 + (i_storey*num_kp)
+    A_kp_13= 38 + (i_storey*num_kp)
+    A_kp_14= 37 + (i_storey*num_kp)
+    A, A_kp_1, A_kp_2, A_kp_3, A_kp_4, A_kp_5, A_kp_6, A_kp_7, A_kp_8, A_kp_9, A_kp_10, A_kp_11, A_kp_12, A_kp_13, A_kp_14
+    !
+    !
+    A_kp_1 = 37 + (i_storey*num_kp)
+    A_kp_2 = 38 + (i_storey*num_kp)
+    A_kp_3 = 39 + (i_storey*num_kp)
+    A_kp_4 = 41 + (i_storey*num_kp)
+    A_kp_5 = 42 + (i_storey*num_kp)
+    A_kp_6 = 43 + (i_storey*num_kp)
+    A_kp_7 = 44 + (i_storey*num_kp)
+    A_kp_8 = 45 + (i_storey*num_kp)
+    A_kp_9 = 46 + (i_storey*num_kp)
+    A_kp_10= 49 + (i_storey*num_kp)
+    A_kp_11= 53 + (i_storey*num_kp)
+    A_kp_12= 35 + (i_storey*num_kp)
+    A_kp_13= 36 + (i_storey*num_kp)
+    A, A_kp_1, A_kp_2, A_kp_3, A_kp_4, A_kp_5, A_kp_6, A_kp_7, A_kp_8, A_kp_9, A_kp_10, A_kp_11, A_kp_12, A_kp_13
+    !
+    *if,i_storey,LT,n_storeys,and,i_storey,NE,0,then
+        A_kp_1 = 37 + (i_storey*num_kp)
+        A_kp_2 = 38 + (i_storey*num_kp)
+        A_kp_3 = 51 + (i_storey*num_kp)
+        A_kp_4 = 50 + (i_storey*num_kp)
+        A_kp_5 = 36 + (i_storey*num_kp)
+        A, A_kp_1, A_kp_2, A_kp_3, A_kp_4, A_kp_5
+    *endif
+*ENDDO
+!
+!
+num_count = (n_storeys*num_kp)
+A, 29+num_count, 30+num_count, 46+num_count, 45+num_count
+!
+ASBA,14,15
+ASBA,22,23
+!
+ASEL,ALL
+ASEL,S,AREA,,32
+ASEL,A,AREA,,14
+ASEL,A,AREA,,30
+CM, corridor_floor,AREA
+ASEL,ALL
+
+
+
+
+
+
+!************************* Creating outside Wall **************************!
+!
+! Create the wall at window side
+!
+*DO,i_storey,1,n_storeys,1
+    kp_id_2 = 14
+    *DO, i_kp, 1, kp_id_2, 1
+        *if, MOD(i_kp,2) ,NE,0,THEN
+            A_kp_1 = i_kp + ((i_storey-1)*num_kp)
+            A_kp_2 = i_kp + 1 + ((i_storey-1)*num_kp)
+            A_kp_3 = i_kp + 1 + ((i_storey)*num_kp)
+            A_kp_4 = i_kp + ((i_storey)*num_kp)
+            A, A_kp_1, A_kp_2, A_kp_3, A_kp_4
+            !k = i_kp/2
+        *else
+        *endif
+    *ENDDO
+    !
+    kp_id_3 = 21
+    *DO, i_kp, kp_id_2, kp_id_3, 1
+        *if,MOD(i_kp,2),EQ,0,THEN
+                A_kp_1 = i_kp + ((i_storey-1)*num_kp)
+                A_kp_2 = i_kp + 1 + ((i_storey-1)*num_kp)
+                A_kp_3 = i_kp + 1 + ((i_storey)*num_kp)
+                A_kp_4 = i_kp + ((i_storey)*num_kp)
+                A, A_kp_1, A_kp_2, A_kp_3, A_kp_4
+        *endif
+    *ENDDO
+    !
+    kp_id_4 = 26
+    *DO, i_kp, kp_id_3, kp_id_4, 1
+        *if,MOD(i_kp,2),NE,0,THEN
+                A_kp_1 = i_kp + ((i_storey-1)*num_kp)
+                A_kp_2 = i_kp + 1 + ((i_storey-1)*num_kp)
+                A_kp_3 = i_kp + 1 + ((i_storey)*num_kp)
+                A_kp_4 = i_kp + ((i_storey)*num_kp)
+                A, A_kp_1, A_kp_2, A_kp_3, A_kp_4
+        *endif
+    *ENDDO
+    !
+    kp_id_5 = 29
+    *DO, i_kp, kp_id_4, kp_id_5, 1
+        *if,MOD(i_kp,2),EQ,0,THEN
+                A_kp_1 = i_kp + ((i_storey-1)*num_kp)
+                A_kp_2 = i_kp + 1 + ((i_storey-1)*num_kp)
+                A_kp_3 = i_kp + 1 + ((i_storey)*num_kp)
+                A_kp_4 = i_kp + ((i_storey)*num_kp)
+                A, A_kp_1, A_kp_2, A_kp_3, A_kp_4
+        *endif
+    *ENDDO
+    !
+    ! Wall without window
+    !
+    *DO, i_kp, 30, 34, 1
+        A_kp_1 = i_kp + ((i_storey-1)*num_kp)
+        A_kp_2 = i_kp + 1 + ((i_storey-1)*num_kp)
+        A_kp_3 = i_kp + 1 + ((i_storey)*num_kp)
+        A_kp_4 = i_kp + ((i_storey)*num_kp)
+        A, A_kp_1, A_kp_2, A_kp_3, A_kp_4
+    *ENDDO
+    !
+    ! Aufzug
+    !
+    *if, i_storey,NE,1,then
+        A, 29+ ((i_storey-1)*num_kp), 30+ ((i_storey-1)*num_kp), 30+ ((i_storey)*num_kp), 29+ ((i_storey)*num_kp)
+    *endif
+    !
+    A, 36 + ((i_storey-1)*num_kp), 37 + ((i_storey-1)*num_kp), 37+ ((i_storey)*num_kp), 36+ ((i_storey)*num_kp)
+    A, 37 + ((i_storey-1)*num_kp),  1 + ((i_storey-1)*num_kp),  1+ ((i_storey)*num_kp), 37+ ((i_storey)*num_kp)
+    !
+    *ENDDO
+CM,outside_wall,AREA
+
+
+
+
+
+
+!************************* Creating inner Wall **************************!
+*IF,bool_inner,EQ,1,then
+    *DO, i_storey, 0, n_storeys - 1, 1 
+        ! Treppen Haus
+        A, 37+(i_storey*num_kp), 38+(i_storey*num_kp), 38+((i_storey+1)*num_kp), 37+((i_storey+1)*num_kp)
+        !A, 38+(i_storey*num_kp), 51+(i_storey*num_kp), 51+((i_storey+1)*num_kp), 38+((i_storey+1)*num_kp)
+        !A, 51+(i_storey*num_kp), 50+(i_storey*num_kp), 50+((i_storey+1)*num_kp), 51+((i_storey+1)*num_kp)
+        !A, 50+(i_storey*num_kp), 36+(i_storey*num_kp), 36+((i_storey+1)*num_kp), 50+((i_storey+1)*num_kp)
+        ! Aufzug
+        A, 45+(i_storey*num_kp), 29+(i_storey*num_kp), 29+((i_storey+1)*num_kp), 45+((i_storey+1)*num_kp)
+        A, 46+(i_storey*num_kp), 30+(i_storey*num_kp), 30+((i_storey+1)*num_kp), 46+((i_storey+1)*num_kp)
+        ! Teekueche 
+        A, 47+(i_storey*num_kp), 31+(i_storey*num_kp), 31+((i_storey+1)*num_kp), 47+((i_storey+1)*num_kp)
+        ! Technik
+        A, 49+(i_storey*num_kp), 48+(i_storey*num_kp), 48+((i_storey+1)*num_kp), 49+((i_storey+1)*num_kp)
+        A, 48+(i_storey*num_kp), 34+(i_storey*num_kp), 34+((i_storey+1)*num_kp), 48+((i_storey+1)*num_kp)
+        !
+    *ENDDO
+    !
+    ! EG config
+    !
+    !A, 38, 39, 39+(1*num_kp), 38+(1*num_kp)
+    A, 41, 42, 42+(1*num_kp), 41+(1*num_kp)
+    A, 52, 26, 26+(1*num_kp), 52+(1*num_kp)
+    LSEL,NONE
+    L, 39, 39+(1*num_kp)                        ! BEAM elemetn (only this one)
+    CM,column_eg,LINE
+    LSEL,ALL
+    !
+    ! 1 OG config
+    !
+    A, 39+(1*num_kp), 40+(1*num_kp), 40+(2*num_kp), 39+(2*num_kp)
+    A, 40+(1*num_kp), 21+(1*num_kp), 21+(2*num_kp), 40+(2*num_kp)
+    A, 40+(1*num_kp), 10+(1*num_kp), 10+(2*num_kp), 40+(2*num_kp)
+    A,  3+(1*num_kp), 54+(1*num_kp), 54+(2*num_kp),  3+(2*num_kp)
+    !
+    ! 1, 2 OG config
+    !
+    *DO, i_storey, 1, n_storeys - 1, 1 
+        A, 41+(i_storey*num_kp), 42+(i_storey*num_kp), 42+((i_storey+1)*num_kp), 41+((i_storey+1)*num_kp)
+        A, 42+(i_storey*num_kp), 43+(i_storey*num_kp), 43+((i_storey+1)*num_kp), 42+((i_storey+1)*num_kp)
+        A, 44+(i_storey*num_kp), 45+(i_storey*num_kp), 45+((i_storey+1)*num_kp), 44+((i_storey+1)*num_kp)
+    *ENDDO
+    !
+    ! 2 OG config
+    !
+    A, 38+(2*num_kp), 39+(2*num_kp), 39+(3*num_kp), 38+(3*num_kp)
+*ENDIF
+!APLOT
+!/PNUM,AREA,1
+
+
+
+
+!************************* Creating stair **************************!
+*IF,bool_inner,EQ,1,and, bool_stair,EQ,1,then
+    *DO, i_storey, 0, n_storeys-2, 1 
+        !
+        num_acc = ((n_storeys+1)*num_kp) + (i_storey*num_kp)
+        !
+        A, 36 +  ((i_storey+1)*num_kp), 1 + num_acc , 10 + num_acc , 11 + num_acc
+        A,  1 +                num_acc, 2 + num_acc ,  9 + num_acc , 10 + num_acc
+        A,  2 +                num_acc, 3 + num_acc ,  8 + num_acc ,  9 + num_acc
+        A,  3 +                num_acc, 4 + num_acc ,  5 + num_acc ,  8 + num_acc
+        A,  5 +                num_acc, 6 + num_acc ,  7 + num_acc ,  8 + num_acc
+        *if, i_storey, NE, 0, then
+            A,  6+num_acc    , 38+((i_storey)*num_kp),  12 + num_acc, 7 + num_acc
+        *endif
+    *ENDDO
+*ENDIF
+!
+! For demonstration only
+!
+!ASEL,U,AREA,,31
+!ASEL,U,AREA,,51,99,24
+
+
+!************************* Creating group for element assignemnt **************************!
+!
+!
+! Group floor slab id-----------------------------------------------
+ASEL,NONE
+*DO, i_storey, 1, n_storeys, 1 
+    ASEL,A,LOC,Z,i_storey*height
+*ENDDO
+ASEL,U,AREA,,corridor_floor     ! Delete unnecessary wall which is selected auto.
+ASEL,U,LOC,Y, (5.75+4.6)/2
+CM,slab_floor,AREA
+ASEL,ALL
+!
+!
+! Group floor Ground id-----------------------------------------------
+ASEL,ALL
+ASEL,S,LOC,Z,0
+CM,ground_floor,AREA
+ASEL,ALL
+!
+!
+! Group Edge of building id-----------------------------------------------
+ASEL,S,AREA,,outside_wall 
+ASEL,U,AREA,,slab_floor
+ASEL,U,AREA,,ground_floor
+ASEL,U,AREA,,corridor_floor 
+CM,outside_wall,AREA
+ASEL,ALL
+!
+!
+! Group Inner wall id-----------------------------------------------
+ASEL,NONE
+*DO, i_storey, 0, n_storeys-1 , 1 
+    ASEL,A,LOC,Z, i_storey*height + (height)/2
+*ENDDO
+ASEL,U,AREA,,outside_wall 
+CM,inner_wall,AREA
+ASEL,ALL
+
+! Group Stairs id-----------------------------------------------
+ASEL,S,LOC,X, 1.15/2
+ASEL,A,LOC,Y, (5.75+4.6)/2
+CM,stair_floor,AREA
+ASEL,ALL
+
+
+!*************************** Material properties ***************************!
+! Move to 'PREP\BuildPara_Var','mac' 
+
+
+!*************************** Material assignemnt ***************************!
+ET,1,SHELL181 				! Use PLANE181 elements
+SECTYPE,1,SHELL
+SECDATA,t_slab
+MP,EX,1,E_slab		! Define Young's modulus for material #1
+MP,PRXY,1,nu_floor 			! Define Poisson's ratio for material #1
+MP,DENS,1,rho_floor,,,
+!MP,DMPR,1,0.1
+!
+ASEL,S,AREA,,slab_floor
+AATT,1,0,1,,1				! Set element attributes: material #1, element #1
+ASEL,ALL
+
+
+ET,2,SHELL181 				! Use PLANE181 elements
+SECTYPE,2,SHELL
+SECDATA,t_corridor
+MP,EX,2,E_corridor 			! Define Young's modulus for material #1
+MP,PRXY,2,nu_corridor		! Define Poisson's ratio for material #1
+MP,DENS,2,rho_corridor,,,
+!
+ASEL,S,AREA,,corridor_floor
+AATT,2,0,2,,2				! Set element attributes: material #1, element #1
+ASEL,ALL
+
+
+ET,3,SHELL181 				                ! Use PLANE181 elements
+SECTYPE,3,SHELL
+SECDATA,t_ground
+MP,EX,3,E_ground 			                ! Define Young's modulus for material #1
+MP,PRXY,3,nu_ground 			            ! Define Poisson's ratio for material #1
+MP,DENS,3,rho_ground,,,
+!
+ASEL,S,AREA,,ground_floor
+AATT,3,0,3,,3				                ! Set element attributes: material #1, element #1
+ASEL,ALL
+
+
+ET,4,SHELL181 				                ! Use PLANE181 elements
+SECTYPE,4,SHELL
+SECDATA,t_edge_wall
+MP,EX,4,E_edge_wall 			            ! Define Young's modulus for material #1
+MP,PRXY,4,nu_edge_wall 			            ! Define Poisson's ratio for material #1
+MP,DENS,4,rho_edge_wall,,,
+!
+ASEL,S,AREA,,outside_wall
+AATT,4,0,4,,4				                ! Set element attributes: material #1, element #1
+ASEL,ALL
+
+
+*IF,bool_inner,EQ,1,then
+    ET,5,SHELL181 				            ! Use PLANE181 elements
+    SECTYPE,5,SHELL
+    SECDATA,t_inner_wall
+    MP,EX,5,E_inner_wall 			        ! Define Young's modulus for material #1
+    MP,PRXY,5,nu_inner_wall 		    	! Define Poisson's ratio for material #1
+    MP,DENS,5,rho_inner_wall,,,
+    !
+    ASEL,S,AREA,,inner_wall
+    AATT,5,0,5,,5				            ! Set element attributes: material #1, element #1
+    ASEL,ALL
+    !
+    !
+    *IF,bool_stair,EQ,1,then
+        ET,6,SHELL181 				        ! Use PLANE181 elements
+        SECTYPE,6,SHELL
+        SECDATA,t_stair
+        MP,EX,6,E_stair 			        ! Define Young's modulus for material #1
+        MP,PRXY,6,nu_stair 			        ! Define Poisson's ratio for material #1
+        MP,DENS,6,rho_stair,,,
+        !
+        ASEL,S,AREA,,stair_floor
+        AATT,6,0,6,,6				        ! Set element attributes: material #1, element #1
+        ASEL,ALL
+    *ENDIF
+    !
+    !
+    ET,7,BEAM189 				            ! Use BEAM189 elements
+    SECTYPE,7,BEAM,RECT 		            ! Use a rectangular cross section for beam
+    SECOFFSET,CENT 				            ! Offset beam node to the centroid
+    SECDATA,t_inner_wall,t_inner_wall, 		! Use same cross section as inner wall
+    MP,EX,7,E_inner_wall				    ! Define Young's modulus for aluminum: material #1
+    MP,PRXY,7,nu_inner_wall 			    ! Define Poisson's ratio for aluminum: material #1
+    MP,DENS,7,rho_inner_wall,,,
+    !
+    LSEL,S,LINE,,column_eg
+    LATT,7,0,7,,,,7
+    LSEL,ALL
+*ENDIF
+
+
+
+!*************************** Meshing ***************************!
+!
+LESIZE,ALL,elem_size
+AESIZE,ALL,elem_size
+!
+AMESH,ground_floor                          !Mesh this first, so it will not select the node create due to inner wall
+NSEL,S,LOC,Z,0
+CM,ground_node,NODE
+NSEL,ALL
+!
+*IF,bool_SSI,EQ,1,then
+    !
+    /INPUT,'PREP\SSI_LPM_para','mac'        !Input SSI parameter
+    /INPUT,'PREP\MAT27_elem','mac'          !Define SSI element
+    !
+    NSEL,S,NODE,,ground_node
+    *GET,n_count,NODE,0,COUNT
+    NGEN,2,n_count,ground_node,,,0,0,-elem_size
+    NSEL,ALL
+    NSEL,S,LOC,Z,-elem_size
+    CM,foundation_node,NODE
+    NSEL,ALL
+    !
+    !
+    KNODE,,ground_node
+    NUMMRG,KP
+    KSEL,S,LOC,Z,0
+    CM,ground_kp,KP
+    CMSEL,ALL
+    !
+    ! Assign MASS21 to ground_kp
+    KSEL,S,KP,,ground_kp
+    KATT,0,8,8
+    KSEL,ALL
+    !
+    ! Assign MATRIX27 stiffness
+    NSEL,ALL
+    TYPE,9
+    REAL,9
+    EINTF,,,LOW,0,0,0,-elem_size,0
+    !
+    ! Assign MATRIX27 damping
+    NSEL,ALL
+    TYPE,10
+    REAL,10
+    EINTF,,,LOW,0,0,0,-elem_size,0
+    NSEL,ALL
+*ENDIF
+!
+ASEL,ALL
+ASEL,U,AREA,,ground_floor
+CM,area_remained,AREA       !Select the area without ground floor
+ASEL,ALL
+!KMESH,ALL
+AMESH,area_remained     
+LMESH,column_eg             !Mesh the only column at the EG
+*IF,bool_SSI,EQ,1,then
+    KMESH,ground_kp
+*ENDIF
+!
+!
+NSEL,ALL
+ESEL,ALL
+NUMMRG,elem
+NUMMRG,node
+!
+!CLRMSHLN                   ! For cleaning the existed mesh, error will occure if SSI is considered. 

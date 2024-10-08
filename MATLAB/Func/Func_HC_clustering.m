@@ -1,4 +1,4 @@
-function Func_HC_clustering(Input_Signal,x,Y_criteria,NumIgnoreCluster, plot_)
+function clusters_origianl = Func_HC_clustering(Input_Signal,x,Y_criteria,NumIgnoreCluster, plot_)
 
 norm_All_nm = normalize(Input_Signal,2,"range");
 Input_Signal_smooth = movmean(Input_Signal,5,2);
@@ -13,7 +13,6 @@ Z = linkage(distances, 'ward');  % 'ward' method is used here, but other methods
 % Step 3: Plot the dendrogram to visualize the hierarchical clustering
 figure;
 dendrogram(Z,0);
-grid on
 title('Hierarchical Binary Cluster Tree', 'Interpreter', 'latex');
 set(gca, 'XTickLabel', []);
 xlabel('Leaf Nodes,~Index of Records (not shown)', 'Interpreter', 'latex');
@@ -26,6 +25,7 @@ else
     Distance = Y_criteria;
 end
 clusters = cluster(Z, 'cutoff',Distance,'criterion','distance');
+clusters_origianl = clusters;
 h = yline(Distance,'r--',['Threshold = ',num2str(Distance)]);
 h.FontSize = 8;  % Set font size to 14
 
@@ -53,13 +53,14 @@ clusters = clusters(validIndices);
 numClusters = max(clusters);  % Number of clusters
 
 
-if   size(x) == size(Input_Signal(1, :))
+if size(x) == size(Input_Signal(1, :))
     f_s = x;
 else
     f_s = transpose(x);
 end
 
-if plot_ == 1
+
+
     for i = 1:numClusters
         % Find the indices of the signals that belong to cluster 'i'
         clusterIndices = find(clusters == i);
@@ -67,21 +68,35 @@ if plot_ == 1
         if  isempty(clusterIndices)
             continue;
         end
-        
+
+        Input_s_per_e = Input_Signal(clusterIndices, :)./trapz(Input_Signal(clusterIndices, :),2);
         disp(['Number of cluster: ',num2str(i)]);
-        
+
+
+        if plot_ ==1
         % Create a new figure for this cluster
         figure;
         sgtitle(['Cluster ' num2str(i) ', $N =$' num2str(length(clusterIndices))], 'Interpreter', 'latex');
         
         % Plot each signal in this cluster
         subplot(2,1,1)
-
+    
+        std_dev =  std(Input_s_per_e,0,1);
+        plot(f_s, mean(Input_s_per_e,1),'k');
+        plot(f_s ,mean(Input_s_per_e,1)+1*std_dev,'c');
+        plot(f_s, mean(Input_s_per_e,1)+3*std_dev,'b');
+        
         for j = 1:length(clusterIndices)
-            energy = trapz(Input_Signal(clusterIndices(j), :));
-            plot(f_s, Input_Signal(clusterIndices(j), :)/energy);
+            plot(f_s,Input_s_per_e(j,:) ,'r:');   
             hold on;
         end
+
+        std_dev =  std(Input_s_per_e,0,1);
+        plot(f_s, mean(Input_s_per_e,1),'k');
+        plot(f_s ,mean(Input_s_per_e,1)+1*std_dev,'c');
+        plot(f_s, mean(Input_s_per_e,1)+3*std_dev,'b');
+
+        legend({'$\mathbf{E}[\tilde{S}_{x}(f)]$','$\mathbf{E}[\tilde{S}_{x}(f)] + 1\sigma$','$\mathbf{E}[\tilde{S}_{x}(f)]+ 3\sigma$','$\tilde{S}_{x}(f)$'}, 'Interpreter', 'latex');
         title('Normalized PSD by Energy $\tilde{S}_{x}(f)$', 'Interpreter', 'latex')
         xlabel('freq (Hz)', 'Interpreter', 'latex');
         ylabel('$\tilde{S}_{x}(f)$', 'Interpreter', 'latex');
@@ -108,6 +123,48 @@ if plot_ == 1
         ylabel('$\hat{S}_{x}(f)$', 'Interpreter', 'latex');
 
         hold off;
+        end
     end
-end
+
+    if plot_ ==1
+        figure;
+        sgtitle(['All Signals, $N =$' num2str(size(Input_Signal,1))], 'Interpreter', 'latex');
+        subplot(2,1,1)
+        std_dev =  std(Input_Signal,0,1);
+        plot(f_s, mean(Input_Signal,1),'k');
+        hold on
+        plot(f_s ,mean(Input_Signal,1)+1*std_dev,'c');
+        plot(f_s, mean(Input_Signal,1)+3*std_dev,'b');
+        for p = 1:size(Input_Signal,1)
+            plot(f_s,Input_Signal(p,:),'r:');
+        end
+        plot(f_s, mean(Input_Signal,1),'k');
+        plot(f_s ,mean(Input_Signal,1)+1*std_dev,'c');
+        plot(f_s, mean(Input_Signal,1)+3*std_dev,'b');
+        hold off
+        legend({'$\mathbf{E}[S_{FFT}(f)]$','$\mathbf{E}[S_{FFT}(f)] + 1\sigma$','$\mathbf{E}[S_{FFT}(f)]+ 3\sigma$','$S_{FFT}(f)$'}, 'Interpreter', 'latex');
+        title('Original signals $S_{FFT}(f)$', 'Interpreter', 'latex')
+        xlabel('freq (Hz)', 'Interpreter', 'latex');
+        ylabel('$\hat{S}_{x}(f)$', 'Interpreter', 'latex');
+    
+    
+        subplot(2,1,2)
+        Input_Signal_e = Input_Signal./trapz(Input_Signal,2);
+        plot(f_s, mean(Input_Signal_e,1),'k');
+        hold on
+        plot(f_s ,mean(Input_Signal_e,1)+1*std_dev,'c');
+        plot(f_s, mean(Input_Signal_e,1)+3*std_dev,'b');
+        for q = 1:size(Input_Signal_e,1)
+            plot(f_s,Input_Signal_e(q,:),'r:');
+        end
+        plot(f_s, mean(Input_Signal_e,1),'k');
+        plot(f_s ,mean(Input_Signal_e,1)+1*std_dev,'c');
+        plot(f_s, mean(Input_Signal_e,1)+3*std_dev,'b');
+        hold off
+        legend({'$\mathbf{E}[\tilde{S}_{x}(f)]$','$\mathbf{E}[\tilde{S}_{x}(f)] + 1\sigma$','$\mathbf{E}[\tilde{S}_{x}(f)]+ 3\sigma$','$\tilde{S}_{x}(f)$'}, 'Interpreter', 'latex');
+        title('Normalized PSD by Energy $\tilde{S}_{x}(f)$', 'Interpreter', 'latex')
+        xlabel('freq (Hz)', 'Interpreter', 'latex');
+        ylabel('$\tilde{S}_{x}(f)$', 'Interpreter', 'latex');
+    end
+
 

@@ -1,38 +1,47 @@
+clear;
+clc;
+close all;
+
+addpath('D:\MDSI_project\MATLAB\Lib\pickpeaks');
+load('cluster_1G_60hz_15_7c.mat')
+load("Menhir_result_1G.mat");
+
+histogram(hc);
+
+cut_f = 40;
+f = linspace(0,500,size(All_s,2));
+All_s = All_s(:,f<=cut_f);
+All_s = All_s./trapz(All_s,2);
+f_s = f(f<=cut_f);
+
+all_peaks = {};
+
+k = 1;
+for p = 1:length(unique(hc)) 
+    potential_peak = zeros(10000,1);
+    p_peak = zeros(10000,1);
+    index = find(hc==p);
+    for i = 1:length(index)
+        peaks = pickpeaks(All_s(index(i),:),0.2,0);
+        %plot(f_s,All_s(index(i),:))
+        %hold on 
+        for j = 1:length(peaks) 
+            scatter(f_s(peaks(j)),All_s(index(i),peaks(j)),'ro');
+            potential_peak(k,1) = f_s(peaks(j));
+            k = k+1;
+        end 
+    end
+    potential_peak(potential_peak == 0) = [];
+    all_peaks{p} = potential_peak;
+end
 
 
-% Assume signals is a matrix where each row is a signal [15 x N] (15 signals, N points per signal)
-N = 3000;  % Length of each signal
-signals = randn(15, N);  % Replace with actual signals data
-
-% Step 1: Compute the mean across all signals
-mean_signal = mean(signals, 1);
-
-% Step 2: Compute the standard deviation across all signals at each point
-std_signal = std(signals, 0, 1);
-
-% Step 3: Compute the standard error of the mean (SEM)
-n_signals = size(signals, 1);
-sem_signal = std_signal / sqrt(n_signals);
-
-% Step 4: Compute the t-statistic for 95% confidence interval with (n-1) degrees of freedom
-confidence_level = 0.95;
-t_value = tinv(confidence_level + (1-confidence_level)/2, n_signals - 1);
-
-% Step 5: Compute the margin of error for the 95% confidence interval
-margin_of_error = t_value * sem_signal;
-
-% Step 6: Plot the mean signal and the 95% confidence interval
-x = 1:N;  % Time or data point axis
-
-figure;
-plot(x, mean_signal, 'LineWidth', 2);  % Plot the mean signal
-hold on;
-
-% Plot the confidence interval as a shaded area
-fill([x, fliplr(x)], [mean_signal + margin_of_error, fliplr(mean_signal - margin_of_error)], ...
-    'r', 'FaceAlpha', 0.3, 'EdgeColor', 'none');
-
-xlabel('Data Points');
-ylabel('Amplitude');
-title('Mean Signal with 95% Confidence Interval');
-hold off;
+figure
+for f = 1:length(unique(hc))
+    x = f*ones(length(all_peaks{f}),1);
+    scatter(all_peaks{f},f,'red','filled','o','MarkerFaceAlpha',0.3)
+    hold on
+end
+grid on 
+xlim([0,40])
+ylim([0,length(unique(hc))+1])

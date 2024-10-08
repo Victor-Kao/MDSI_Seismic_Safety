@@ -1,4 +1,16 @@
-function freq_signal = Func_FFT_half(time_singal, fs)
+function freq_signal = Func_FFT_half(time_singal, nfft, fs)
+    if ~isequal(size(time_singal), [1,length(time_singal)])
+        time_singal = transpose(time_singal);
+    end
+
+    if nfft > length(time_singal)
+        time_singal = [time_singal, zeros(1, nfft - length(time_singal))];
+    elseif isempty(nfft)
+    else
+        disp(['Warning! nfft: ', num2str(nfft), ' <= size of input, x: ',num2str(length(time_singal))]);
+        disp(['Using default size, x = ',num2str(length(time_singal))]);
+    end
+
     L = length(time_singal);
     Y = fft(time_singal);
     P2 = Y/L;

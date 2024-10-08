@@ -1,0 +1,50 @@
+
+!*************************** Geometry information ***************************!
+!
+height          = 3.37  ![m]
+n_storeys       = 3     ![m]
+elem_size       = 0.4   ![m]
+
+
+!*************************** Material properties ***************************!
+!
+! Assume the column_eg (BEAM element) in EG has the same property as inner wall (SHELL element)
+! Thickness [m]-----------------------------------------------
+t_slab          = 0.468 
+t_corridor      = 0.8
+t_ground        = 0.6
+t_edge_wall     = 0.2
+t_inner_wall    = 0.2
+t_stair         = 0.468
+
+! Young's modulus [N/m^2] -----------------------------------------------
+E_slab          = 30e9  
+E_corridor      = 30e9
+E_ground        = 30e9
+E_edge_wall     = 30e9
+E_inner_wall    = 30e9
+E_stair         = 30e9
+
+! Poisson's ratio [-] -----------------------------------------------
+nu_slab         = 0.27  
+nu_corridor     = 0.27
+nu_ground       = 0.27
+nu_edge_wall    = 0.27
+nu_inner_wall   = 0.27
+nu_stair        = 0.27
+
+! Density [kg/m^3] -----------------------------------------------
+rho_slab        = 2500  
+rho_corridor    = 2500 
+rho_ground      = 2500 
+rho_edge_wall   = 2500 
+rho_inner_wall  = 2500 
+rho_stair       = 2500
+
+
+!-----------------------Soil properties------------------------!
+Vs_soil         = 450          ! Shear wave velocity [m/s]
+Rho_soil        = 2.3e3        ! Soil density [kg/m^3]
+Nu_soil         = 0.33         ! Soil Poisson's Ratio [-]
+L_f             = elem_size/2  ! Foundation half-length [m]
+B_f             = elem_size/2  ! Foundation half-width [m]

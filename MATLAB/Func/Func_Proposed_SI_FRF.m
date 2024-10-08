@@ -1,5 +1,6 @@
 function [FRF_ROM,freq_ROM,SI_info] = Func_Proposed_SI_FRF(inputSignal,outputSignal,t,fs,cutoff_freq,NumDof,SearchRange)
 
+
 % Compute the FFT of the input and output signals
 N = length(t);
 f = (0:N-1)*(fs/N); % Frequency vector
@@ -74,7 +75,7 @@ for i_r = 1:size(ranges, 1)
         ROM_cand_fit.A = Copy_fit.A([2*j-1,2*j]);
         ROM_cand_fit.C = Copy_fit.C([2*j-1,2*j]);
         
-        [FRF_cand,freq_cand] = freqresp(ROM_cand_fit,f_1);
+        [FRF_cand,~] = freqresp(ROM_cand_fit,f_1);
         error = sum(abs(resp) - abs(FRF_cand));
         error_list(j) = error;
     end

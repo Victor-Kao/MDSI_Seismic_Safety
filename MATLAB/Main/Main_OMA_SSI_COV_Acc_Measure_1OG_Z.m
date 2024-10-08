@@ -22,9 +22,9 @@ mat_tile_list = Func_FindMatFiles(dir_activate_1G2G);
 list_a = [10,11];
 fs = 1024;
 low_freq = 2;
-high_freq = 40;
+high_freq = 100;
 [b,a] = Func_FilterDesign(low_freq,high_freq,4,1024);
-i_file = 2;
+i_file = 10;
 
 load(mat_tile_list{i_file});
 S_1 = double(timeSeriesData.Data(10,:));
@@ -37,8 +37,8 @@ S_2 = filtfilt(b, a, S_2);
 S_3 = filtfilt(b, a, S_3);
 S_4 = filtfilt(b, a, S_4);
 
-S_3_f = Func_FFT_half(S_3,1024);
-S_4_f = Func_FFT_half(S_4,1024);
+S_3_f = Func_FFT_half(S_3,512,1024);
+S_4_f = Func_FFT_half(S_4,512,1024);
 
 S_1 = Func_Resample(S_1,1024,128);
 S_2 = Func_Resample(S_2,1024,128);
