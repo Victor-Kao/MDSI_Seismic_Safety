@@ -1,51 +1,51 @@
 *IF, bool_SSI,EQ,1,then
-! Define mass 
-!
-ET,8,MASS21
-KEYOPT,8,3,0 				!3D mass with rotary inertia, check mass21,
-R,8,M_X,M_Y,M_Z,Ix,Iy,Iz 	!MASSX, MASSY, MASSZ, IXX, IYY, IZZ, if KEYOPT (3) = 0
-!
-!
-!Define the stiffness matrix
-!
-ET,9,MATRIX27				  
-KEYOPT,9,1,1
-KEYOPT,9,2,0
-KEYOPT,9,3,4
-KEYOPT,9,4,1
-R,9,Ka_11,0,0,0,Ka_15,0,                    ! C1 to C6
-RMORE,-Ka_11,0,0,0,-Ka_15,0,                ! C7 to C12
-RMORE,Ka_22,0,Ka_24,0,0,0,            		! C13 to 18
-RMORE,-Ka_22,0,-Ka_24,0,0,Ka_33,        	! C19 to 24
-RMORE,0,0,0,0,0,-Ka_33,        		        ! C25 to 30
-RMORE,0,0,0,Ka_44,0,0,            		    ! C31 to 36
-RMORE,0,-Ka_24,0,-Ka_44,0,0,           		! C37 to 42
-RMORE,Ka_55,0,-Ka_15,0,0,0,                 ! C43 to 48
-RMORE,-Ka_55,0,Ka_66,0,0,0,         		! C49 to 54
-RMORE,0,0,-Ka_66,Ka_11,0,0,          		! C55 to 60
-RMORE,0,Ka_15,0,Ka_22,0,Ka_24,          	! C61 to 66
-RMORE,0,0,Ka_33,0,0,0, 			 			! C67 to 72
-RMORE,Ka_44,0,0,Ka_55,0,Ka_66,          	! C73 to 78
-!
-!
-!Define the damping matrix
-!
-ET,10,MATRIX27                 
-KEYOPT,10,1,1
-KEYOPT,10,2,0
-KEYOPT,10,3,5
-KEYOPT,10,4,1
-R,10,Ca_11,0,0,0,Ca_15,0,          ! C1 to C6
-RMORE,-Ca_11,0,0,0,-Ca_15,0,        ! C7 to C12
-RMORE,Ca_22,0,Ca_24,0,0,0,          ! C13 to 18
-RMORE,-Ca_22,0,-Ca_24,0,0,Ca_33,    ! C19 to 24
-RMORE,0,0,0,0,0,-Ca_33,             ! C25 to 30
-RMORE,0,0,0,Ca_44,0,0,              ! C31 to 36
-RMORE,0,-Ca_24,0,-Ca_44,0,0,        ! C37 to 42
-RMORE,Ca_55,0,-Ca_15,0,0,0,         ! C43 to 48
-RMORE,-Ca_55,0,Ca_66,0,0,0,         ! C49 to 54
-RMORE,0,0,-Ca_66,Ca_11,0,0,         ! C55 to 60
-RMORE,0,Ca_15,0,Ca_22,0,Ca_24,      ! C61 to 66
-RMORE,0,0,Ca_33,0,0,0,              ! C67 to 72
-RMORE,Ca_44,0,0,Ca_55,0,Ca_66,      ! C73 to 78
+    ! Define mass 
+    !
+    ET,8,MASS21
+    KEYOPT,8,3,0 				!3D mass with rotary inertia, check mass21,
+    R,8,M_X,M_Y,M_Z,Ix,Iy,Iz 	!MASSX, MASSY, MASSZ, IXX, IYY, IZZ, if KEYOPT (3) = 0
+    !
+    !
+    !Define the stiffness matrix
+    !
+    ET,9,MATRIX27				  
+    KEYOPT,9,1,1
+    KEYOPT,9,2,0
+    KEYOPT,9,3,4
+    KEYOPT,9,4,1
+    R,9,Ka_11,0,0,0,Ka_15,0,                    ! C1 to C6
+    RMORE,-Ka_11,0,0,0,-Ka_15,0,                ! C7 to C12
+    RMORE,Ka_22,0,Ka_24,0,0,0,            		! C13 to 18
+    RMORE,-Ka_22,0,-Ka_24,0,0,Ka_33,        	! C19 to 24
+    RMORE,0,0,0,0,0,-Ka_33,        		        ! C25 to 30
+    RMORE,0,0,0,Ka_44,0,0,            		    ! C31 to 36
+    RMORE,0,-Ka_24,0,-Ka_44,0,0,           		! C37 to 42
+    RMORE,Ka_55,0,-Ka_15,0,0,0,                 ! C43 to 48
+    RMORE,-Ka_55,0,Ka_66,0,0,0,         		! C49 to 54
+    RMORE,0,0,-Ka_66,Ka_11,0,0,          		! C55 to 60
+    RMORE,0,Ka_15,0,Ka_22,0,Ka_24,          	! C61 to 66
+    RMORE,0,0,Ka_33,0,0,0, 			 			! C67 to 72
+    RMORE,Ka_44,0,0,Ka_55,0,Ka_66,          	! C73 to 78
+    !
+    !
+    !Define the damping matrix
+    !
+    ET,10,MATRIX27                 
+    KEYOPT,10,1,1
+    KEYOPT,10,2,0
+    KEYOPT,10,3,5
+    KEYOPT,10,4,1
+    R,10,Ca_11,0,0,0,Ca_15,0,          ! C1 to C6
+    RMORE,-Ca_11,0,0,0,-Ca_15,0,        ! C7 to C12
+    RMORE,Ca_22,0,Ca_24,0,0,0,          ! C13 to 18
+    RMORE,-Ca_22,0,-Ca_24,0,0,Ca_33,    ! C19 to 24
+    RMORE,0,0,0,0,0,-Ca_33,             ! C25 to 30
+    RMORE,0,0,0,Ca_44,0,0,              ! C31 to 36
+    RMORE,0,-Ca_24,0,-Ca_44,0,0,        ! C37 to 42
+    RMORE,Ca_55,0,-Ca_15,0,0,0,         ! C43 to 48
+    RMORE,-Ca_55,0,Ca_66,0,0,0,         ! C49 to 54
+    RMORE,0,0,-Ca_66,Ca_11,0,0,         ! C55 to 60
+    RMORE,0,Ca_15,0,Ca_22,0,Ca_24,      ! C61 to 66
+    RMORE,0,0,Ca_33,0,0,0,              ! C67 to 72
+    RMORE,Ca_44,0,0,Ca_55,0,Ca_66,      ! C73 to 78
 *ENDIF

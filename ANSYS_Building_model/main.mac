@@ -1,0 +1,35 @@
+/CLEAR,NOSTART
+
+bool_check_real_shape = 0 ! Display the model in define thickness 
+
+! PREP setting
+bool_inner = 1
+bool_stair = 1  ! Both bool_inner = 1 and bool_stair = 1, then stair will be built
+bool_SSI   = 1  ! MATRIX27 soil-structure interection
+
+
+! SOLU setting
+Solu_type = 2   ! ANYTYPE: if 2 = Modal, 3 = Harmonic, 4 = transient
+Star_Freq = 0   ! [Hz]
+End_Freq  = 40  ! [Hz]
+N_modes   = 40  ! Only use for ANYTYPE = 2
+
+
+! PREP ----------------------------------------------------
+/PREP7
+/input,'PREP\BuildPara_Var','mac'
+/input,'PREP\BuildGeo_TK','mac'
+
+*IF, bool_check_real_shape, EQ, 1, then
+    /ESHAPE,1
+*ENDIF
+
+!/input,'PREP\BCs','mac'
+
+
+
+! SOLU ----------------------------------------------------
+*IF, Solu_type, EQ, 2, then
+    /input,'SOLU\Modal_Analysis','mac'
+*ENDIF
+
