@@ -12,7 +12,7 @@ elem_size       = 0.4   ![m]
 ! Thickness [m]-----------------------------------------------
 t_slab          = 0.468 
 t_corridor      = 0.8
-t_ground        = 0.6
+t_ground        = 0.05
 t_edge_wall     = 0.2
 t_inner_wall    = 0.2
 t_stair         = 0.468

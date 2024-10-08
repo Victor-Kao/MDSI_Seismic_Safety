@@ -5,7 +5,7 @@ bool_check_real_shape = 0 ! Display the model in define thickness
 ! PREP setting
 bool_inner = 1
 bool_stair = 1  ! Both bool_inner = 1 and bool_stair = 1, then stair will be built
-bool_SSI   = 1  ! MATRIX27 soil-structure interection
+bool_SSI   = 0  ! MATRIX27 soil-structure interection
 
 
 ! SOLU setting
