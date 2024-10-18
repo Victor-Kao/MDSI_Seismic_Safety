@@ -6,4 +6,6 @@
 /Building_info/Scans
 /Building_info/fotos
 /Building_info/ANSYS_simple_model
+/ANSYS_Building_model/Results_Ansys
+
 *.mat

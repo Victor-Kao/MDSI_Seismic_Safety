@@ -1,7 +1,0 @@
-!****************************Modal Analysis*******************************!
-/SOLU 
-ANTYPE,2
-MODOPT,LANB,N_modes,Star_Freq,End_Freq, ,OFF   
-/STATUS,SOLU
-SOLVE   
-FINISH

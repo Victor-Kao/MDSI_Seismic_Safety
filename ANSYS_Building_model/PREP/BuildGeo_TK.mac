@@ -280,7 +280,7 @@ ASEL,ALL
     !
     ! Wall without window
     !
-    *DO, i_kp, 30, 34, 1
+    *DO, i_kp, 30, 33, 1
         A_kp_1 = i_kp + ((i_storey-1)*num_kp)
         A_kp_2 = i_kp + 1 + ((i_storey-1)*num_kp)
         A_kp_3 = i_kp + 1 + ((i_storey)*num_kp)
@@ -294,6 +294,8 @@ ASEL,ALL
         A, 29+ ((i_storey-1)*num_kp), 30+ ((i_storey-1)*num_kp), 30+ ((i_storey)*num_kp), 29+ ((i_storey)*num_kp)
     *endif
     !
+    A, 34 + ((i_storey-1)*num_kp), 53 + ((i_storey-1)*num_kp), 53+ ((i_storey)*num_kp), 34+ ((i_storey)*num_kp)
+    A, 53 + ((i_storey-1)*num_kp), 35 + ((i_storey-1)*num_kp), 35+ ((i_storey)*num_kp), 53+ ((i_storey)*num_kp)
     A, 36 + ((i_storey-1)*num_kp), 37 + ((i_storey-1)*num_kp), 37+ ((i_storey)*num_kp), 36+ ((i_storey)*num_kp)
     A, 37 + ((i_storey-1)*num_kp),  1 + ((i_storey-1)*num_kp),  1+ ((i_storey)*num_kp), 37+ ((i_storey)*num_kp)
     !
@@ -372,7 +374,7 @@ CM,outside_wall,AREA
         A,  5 +                num_acc, 6 + num_acc ,  7 + num_acc ,  8 + num_acc
         A,  6+num_acc    , 38+((i_storey)*num_kp),  12 + num_acc, 7 + num_acc
     *ENDDO
-    ASBA,9,149,,DELETE,KEEP
+    ASBA,9,152,,DELETE,KEEP
     NUMMRG,KP
 *ENDIF
 ! Combine the overlap area 
@@ -424,7 +426,7 @@ ASEL,ALL
         ASEL,S,LOC,X, 1.15/2
         ASEL,A,LOC,Y, (5.75+4.6)/2
         ASEL,U,AREA,,corridor_floor
-        ASEL,U,AREA,,149
+        ASEL,U,AREA,,152
         ASEL,U,AREA,,10
         CM,stair_floor,AREA
         ASEL,ALL
@@ -441,8 +443,8 @@ ET,1,SHELL181 				! Use PLANE181 elements
 SECTYPE,1,SHELL
 SECDATA,t_slab
 MP,EX,1,E_slab		! Define Young's modulus for material #1
-MP,PRXY,1,nu_floor 			! Define Poisson's ratio for material #1
-MP,DENS,1,rho_floor,,,
+MP,PRXY,1,nu_slab 			! Define Poisson's ratio for material #1
+MP,DENS,1,rho_slab,,,
 !MP,DMPR,1,0.1
 !
 ASEL,S,AREA,,slab_floor
@@ -594,7 +596,7 @@ AMESH,area_remained
 !
 NSEL,ALL
 ESEL,ALL
+KSEL,ALL
 NUMMRG,elem
 NUMMRG,node
-
 !CLRMSHLN                   ! For cleaning the existed mesh, error will occure if SSI is considered. 

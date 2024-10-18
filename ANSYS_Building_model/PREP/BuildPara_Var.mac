@@ -3,7 +3,6 @@
 !
 height          = 3.37  ![m]
 n_storeys       = 3     ![m]
-elem_size       = 0.4   ![m]
 
 
 !*************************** Material properties ***************************!

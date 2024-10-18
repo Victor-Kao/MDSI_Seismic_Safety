@@ -1,35 +1,48 @@
 /CLEAR,NOSTART
+!/NERR,100000
 
 bool_check_real_shape = 0 ! Display the model in define thickness 
 
 ! PREP setting
 bool_inner = 1
-bool_stair = 1  ! Both bool_inner = 1 and bool_stair = 1, then stair will be built
-bool_SSI   = 0  ! MATRIX27 soil-structure interection
+bool_stair = 1      ! Both bool_inner = 1 and bool_stair = 1, then stair will be built
+bool_SSI   = 1      ! MATRIX27 soil-structure interection
+elem_size  = 0.4    ![m]
 
 
 ! SOLU setting
-Solu_type = 2   ! ANYTYPE: if 2 = Modal, 3 = Harmonic, 4 = transient
-Star_Freq = 0   ! [Hz]
-End_Freq  = 40  ! [Hz]
-N_modes   = 40  ! Only use for ANYTYPE = 2
+Solu_type = 3       ! ANYTYPE: if 2 = Modal, 3 = Harmonic, 4 = transient
+Star_Freq = 0.001   ! [Hz]
+End_Freq  = 100      ! [Hz]
+Freq_Incr = 0.1     ! [Hz]  Only use for calculate num of step, however, the final num of step might be different due to auto-process
+N_modes   = 40      ! Only use for ANYTYPE = 2
+Damping_ratio = 0.05 
+
+! POST setting
+bool_write_result_csv = 1 ! if bool_write_result_csv = 1, The POST26 results will be written as csv and save in designated folder. 
+
 
 
 ! PREP ----------------------------------------------------
 /PREP7
 /input,'PREP\BuildPara_Var','mac'
 /input,'PREP\BuildGeo_TK','mac'
+/input,'PREP\MeasurePoint_SEL','mac'
 
 *IF, bool_check_real_shape, EQ, 1, then
     /ESHAPE,1
 *ENDIF
 
-!/input,'PREP\BCs','mac'
-
-
 
 ! SOLU ----------------------------------------------------
-*IF, Solu_type, EQ, 2, then
-    /input,'SOLU\Modal_Analysis','mac'
+/input,'SOLU\solver','mac'
+
+! POST ----------------------------------------------------
+*IF,Solu_type,EQ,2,then
+    ! 
+*ELSEIF,Solu_type,EQ,3
+    /input,'POST\POST26','mac'
+*ELSE
+    !   
 *ENDIF
 

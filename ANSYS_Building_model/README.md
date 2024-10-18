@@ -20,7 +20,7 @@ Author: Wei-Teng Kao (ge2gak@mytum.de)
     - [Modal_Analysis.mac](/SOLU/Modal_Analysis.mac) : Modal analysis 
 
 
-3. ANSYS_Building_model/POSTL Folder for postprossesor
+3. ANSYS_Building_model/POST: Folder for postprossesor
 
 ### Parameter
 - General:

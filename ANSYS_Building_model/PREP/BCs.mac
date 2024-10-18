@@ -12,5 +12,5 @@
     D,ground_node,roty,0
     D,ground_node,rotz,0
     ! Please apply the displacement on ground_node
-    NSEL,ALL
 *ENDIF
+NSEL,ALL

@@ -1,0 +1,116 @@
+!POST setting, Channel number (CH) is coording to matlab file
+!
+!
+!
+! Assumption
+!
+! half of the thickness of wall = 0.1 [m] 
+t_wall_meas = 0.1
+!
+! 1OG ----------------------------------------------------------------------------
+!
+! CHANNEL 7,8,9
+pos_TRIAX_1OG_X = 4.39 + t_wall_meas + 4.10 + 0.2  ! 0.2 = distance from intersection of wall to center of geophone (appr.)
+pos_TRIAX_1OG_Y = 4.60
+pos_TRIAX_1OG_Z = 1*height
+!
+pos_CH10_X      = 4.59 + t_wall_meas + 1.21
+pos_CH10_Y      = 4.60 - 1.92
+pos_CH10_Z      = 1*height
+!
+pos_CH11_X      = 4.59 + t_wall_meas + 2.50 
+pos_CH11_Y      = 9.61 - 1.47
+pos_CH11_Z      = 1*height 
+!
+pos_CH12_X      = 11.387 !(already consider thickness of wall = 0.1, computed by CATIA) 
+pos_CH12_Y      = 7.2700 !(already consider thickness of wall = 0.1, computed by CATIA)
+pos_CH12_Z      = 1*height
+!
+!
+! 2OG ----------------------------------------------------------------------------
+!
+! CHANNEL 1,2,3
+pos_TRIAX_2OG_X = 11.387 !(already consider thickness of wall = 0.1, computed by CATIA)
+pos_TRIAX_2OG_Y = 7.2700 !(already consider thickness of wall = 0.1, computed by CATIA)
+pos_TRIAX_2OG_Z = 2*height
+!
+pos_CH13_X      = 14.037 !(computed in CATIA)
+pos_CH13_Y      = 3.7 + t_wall_meas
+pos_CH13_Z      = 2*height 
+!
+pos_CH14_X      = 4.59 + t_wall_meas + 2.50
+pos_CH14_Y      = 9.61 - 1.47
+pos_CH14_Z      = 2*height 
+!
+pos_CH15_X      = 4.39 + t_wall_meas + 4.84  
+pos_CH15_Y      = 4.60
+pos_CH15_Z      = 2*height 
+!
+!
+! EG ----------------------------------------------------------------------------
+!
+!pos_TRIAX_EG_X  = not consider
+!pos_TRIAX_EG_Y  = not consider
+!pos_TRIAX_EG_Z  = not consider
+!
+!
+! Select and name NODE ----------------------------------------------------------------------------
+!
+sel_range = elem_size*0.55
+!
+! CH 1,2,3
+NSEL,S,LOC,X,pos_TRIAX_2OG_X - sel_range, pos_TRIAX_2OG_X + sel_range
+NSEL,R,LOC,Y,pos_TRIAX_2OG_Y - sel_range, pos_TRIAX_2OG_Y + sel_range
+NSEL,R,LOC,Z,pos_TRIAX_2OG_Z 
+*GET,n_triax_2OG,NODE,,NUM,MIN  
+NSEL,All
+!
+! CH 7,8,9
+NSEL,S,LOC,X,pos_TRIAX_1OG_X - sel_range, pos_TRIAX_1OG_X + sel_range
+NSEL,R,LOC,Y,pos_TRIAX_1OG_Y - sel_range, pos_TRIAX_1OG_Y + sel_range
+NSEL,R,LOC,Z,pos_TRIAX_1OG_Z
+*GET,n_triax_1OG,NODE,,NUM,MIN  
+NSEL,All
+!
+! CH 10
+NSEL,S,LOC,X,pos_CH10_X - sel_range, pos_CH10_X + sel_range
+NSEL,R,LOC,Y,pos_CH10_Y - sel_range, pos_CH10_Y + sel_range
+NSEL,R,LOC,Z,pos_CH10_Z
+*GET,n_CH10,NODE,,NUM,MIN  
+NSEL,All
+!
+! CH 11
+NSEL,S,LOC,X,pos_CH11_X - sel_range, pos_CH11_X + sel_range
+NSEL,R,LOC,Y,pos_CH11_Y - sel_range, pos_CH11_Y + sel_range
+NSEL,R,LOC,Z,pos_CH11_Z
+*GET,n_CH11,NODE,,NUM,MIN  
+NSEL,All
+!
+! CH 12
+NSEL,S,LOC,X,pos_CH12_X - sel_range, pos_CH12_X + sel_range
+NSEL,R,LOC,Y,pos_CH12_Y - sel_range, pos_CH12_Y + sel_range
+NSEL,R,LOC,Z,pos_CH12_Z
+*GET,n_CH12,NODE,,NUM,MIN  
+NSEL,All
+!
+! CH 13
+NSEL,S,LOC,X,pos_CH13_X - sel_range, pos_CH13_X + sel_range
+NSEL,R,LOC,Y,pos_CH13_Y - sel_range, pos_CH13_Y + sel_range
+NSEL,R,LOC,Z,pos_CH13_Z
+*GET,n_CH13,NODE,,NUM,MIN  
+NSEL,All
+!
+! CH 14
+NSEL,S,LOC,X,pos_CH14_X - sel_range, pos_CH14_X + sel_range
+NSEL,R,LOC,Y,pos_CH14_Y - sel_range, pos_CH14_Y + sel_range
+NSEL,R,LOC,Z,pos_CH14_Z
+*GET,n_CH14,NODE,,NUM,MIN  
+NSEL,All
+!
+! CH 15
+NSEL,S,LOC,X,pos_CH15_X - sel_range, pos_CH15_X + sel_range
+NSEL,R,LOC,Y,pos_CH15_Y - sel_range, pos_CH15_Y + sel_range
+NSEL,R,LOC,Z,pos_CH15_Z
+*GET,n_CH15,NODE,,NUM,MIN  
+NSEL,All
+

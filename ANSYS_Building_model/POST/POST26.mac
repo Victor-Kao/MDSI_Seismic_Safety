@@ -1,0 +1,116 @@
+/POST26 	!Postprocessor im Frequenzbereich
+NUMVAR, 200	!Anzahl der möglichen Variablen (default 10)
+!
+Num_sol_point = 12
+Num_Freq = (End_Freq / Freq_Incr) ! Ignore the result at 0 Hz, start from first increment = 1*Freq_Incr.
+!
+!
+! Create node solution at designated locations
+NSOL, 11 , n_triax_2OG , U, X, FRF_CH_1
+NSOL, 12 , n_triax_2OG , U, Y, FRF_CH_2
+NSOL, 13 , n_triax_2OG , U, Z, FRF_CH_3
+NSOL, 17 , n_triax_1OG , U, X, FRF_CH_7
+NSOL, 18 , n_triax_1OG , U, Y, FRF_CH_8
+NSOL, 19 , n_triax_1OG , U, Z, FRF_CH_9
+NSOL, 110, n_CH10      , U, Z, FRF_CH_10
+NSOL, 111, n_CH11      , U, Z, FRF_CH_11
+NSOL, 112, n_CH12      , U, Z, FRF_CH_12
+NSOL, 113, n_CH13      , U, Z, FRF_CH_13
+NSOL, 114, n_CH14      , U, Z, FRF_CH_14
+NSOL, 115, n_CH15      , U, Z, FRF_CH_15
+!
+!
+! Create a array of index of NSOL, used for further iteration
+*DIM,NVAR,ARRAY,Num_sol_point,1
+*DIM,N_CH,ARRAY,Num_sol_point,1
+!Index--------------------1-------2-------3-------4-------5-------6-------7-------8-------9------10
+*SET,    NVAR(1,1) ,     11,     12,     13,     17,     18,     19,    110,    111,    112,    113
+*SET,    NVAR(11,1),    114,    115 
+!
+!Index--------------------1-------2-------3-------4-------5-------6-------7-------8-------9------10
+*SET,    N_CH(1,1) ,      1,      2,      3,      7,      8,      9,     10,     11,     12,     13
+*SET,    N_CH(11,1),     14,     15 
+!
+!
+! Create the array to store solution
+*DO,i_sol,1,Num_sol_point,1  
+    i_CH  =  N_CH(i_sol,1)
+    *DIM,Disp_CH_%i_CH%,ARRAY,Num_Freq,5,1
+*ENDDO
+!
+!
+! Writing the result into array 
+*DO,i_sol,1,Num_sol_point,1 
+    ! Select the i-th of nvar
+    i_var =  NVAR(i_sol,1)
+    i_CH  =  N_CH(i_sol,1)
+    !
+    prvar,i_var
+    *DO,ifreq,1,Num_Freq,1  
+        *GET, Disp_CH_%i_CH%(ifreq,1) ,VARI,       1, REAL ,(ifreq)*Freq_Incr  ! E.g. Freq: 1*0.1, 2*0.1,..., 400*0.1
+        *GET, Disp_CH_%i_CH%(ifreq,2), VARI,   i_var, AMPL ,(ifreq)*Freq_Incr
+        *GET, Disp_CH_%i_CH%(ifreq,3), VARI,   i_var, PHASE,(ifreq)*Freq_Incr
+        *GET, Disp_CH_%i_CH%(ifreq,4), VARI,   i_var, REAL ,(ifreq)*Freq_Incr
+        *GET, Disp_CH_%i_CH%(ifreq,5), VARI,   i_var, IMAG ,(ifreq)*Freq_Incr
+    *ENDDO
+*ENDDO
+
+
+
+*IF,bool_write_result_csv,EQ,1,then
+    !
+    ! WARNING: Here the results of triax_2OG stored in FRF_MEAS_CH_3
+    ! WARNING: Here the results of triax_1OG stored in FRF_MEAS_CH_9
+    !
+    /MKDIR,Results_Ansys
+    !
+    *DO,i_sol,1,Num_sol_point,1 
+        !
+        i_CH  =  N_CH(i_sol,1)
+        !
+        *CFOPEN,'Results_Ansys\DISP_CH_%i_CH%_BOOL_IN_%bool_inner%_STA_%bool_stair%_SSI_%bool_SSI%_VAR_DR_%Damping_ratio%','csv',
+        *VWRITE
+        (2x,'Freq',14x,'AMPL',14x,'PHASE',10x,'REAL',10x,'IMAG')
+        *VWRITE, Disp_CH_%i_CH%(1,1), Disp_CH_%i_CH%(1,2), Disp_CH_%i_CH%(1,3), Disp_CH_%i_CH%(1,4), Disp_CH_%i_CH%(1,5),,,,       ! Write the data to a file
+        (E14.7,2x,E14.7,2x,E14.7,2x,E14.7,2x,E14.7)									      
+        *CFCLOS 
+    *ENDDO
+*ENDIF
+FINISH 		
+
+
+
+
+! Second version with tree-like folder structure
+!
+!*IF,bool_write_result_csv,EQ,1,then
+!    !
+!    ! WARNING: Here the results of triax_2OG stored in FRF_MEAS_CH_3
+!    ! WARNING: Here the results of triax_1OG stored in FRF_MEAS_CH_9
+!    !
+!    *DO,i_CH,9,15,1  
+!        /MKDIR,Results_Ansys\FRF_MEAS_CH_%i_CH%   ! Example: create the folder name:  Results_Ansys\FRF_MEAS_CH_9~15
+!    *ENDDO
+!    /MKDIR,Results_Ansys\FRF_MEAS_CH_3            ! For triax_2OG 
+!    !
+!    *DO,i_sol,1,Num_sol_point,1 
+!        !
+!        i_CH  =  N_CH(i_sol,1)
+!        !
+!        ! Can be extended in the future
+!        *IF,i_CH,LE,3,then
+!            *CFOPEN,'Results_Ansys\FRF_MEAS_CH_3\DISP_CH_%i_CH%','csv',              
+!        *ELSEIF,i_CH,GE,7,and,i_CH,LE,9
+!            *CFOPEN,'Results_Ansys\FRF_MEAS_CH_9\DISP_CH_%i_CH%','csv',              
+!        *ELSE
+!            *CFOPEN,'Results_Ansys\FRF_MEAS_CH_%i_CH%\DISP_CH_%i_CH%','csv',              
+!        *ENDIF
+!        !
+!        *VWRITE
+!        (2x,'Freq',14x,'AMPL',14x,'PHASE',10x,'REAL',10x,'IMAG')
+!        *VWRITE, Disp_CH_%i_CH%(1,1), Disp_CH_%i_CH%(1,2), Disp_CH_%i_CH%(1,3), Disp_CH_%i_CH%(1,4), Disp_CH_%i_CH%(1,5),,,,       ! Write the data to a file
+!        (E14.7,2x,E14.7,2x,E14.7,2x,E14.7,2x,E14.7)									      
+!        *CFCLOS 
+!    *ENDDO
+!*ENDIF
+!FINISH 		
