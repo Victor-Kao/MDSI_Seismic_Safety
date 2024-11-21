@@ -9,5 +9,6 @@
 /ANSYS_Building_model/Results_Ansys
 /PCE_surrogate/InputData/Realization
 /PCE_surrogate/InputData/Realization_frf
+/PCE_surrogate/InputData/Realization_frf_noSSI
 
 *.mat
