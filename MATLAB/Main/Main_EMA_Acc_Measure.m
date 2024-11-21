@@ -6,9 +6,9 @@ addpath("D:\MDSI_project\MATLAB\Func");
 
 
 %% Acc Data for 2 O.G. (Channel 15), first mode
-dir_activate_1G2G = "D:\MDSI_project\DATA_GM_RawData\DATA_ACC_Measure12032024\DATA_Hammer\Time_domain";
+dir_activate_1G2G = "D:\MDSI_project\DATA_GM_RawData\DATA_ACC_Measure12032024\DATA_Hammer\Time_domain_update";
 mat_tile_list = Func_FindMatFiles(dir_activate_1G2G);
-list_a = [10,11];
+list_a = [];
 fs = 1024;
 low_freq = 2;
 high_freq = 100;
@@ -18,13 +18,13 @@ high_freq = 100;
 k = 1;
 figure
 sgtitle('EMA using Impact Hammer ', 'Interpreter', 'latex','FontSize',25)
-for i_file = 4:6%length(mat_tile_list)
+for i_file = 10:13%length(mat_tile_list)
     if ismember(i_file, list_a)
         continue
     end
 
     load(mat_tile_list{i_file});
-    outputSignal = double(timeSeriesData.Data(9,:));
+    outputSignal = double(timeSeriesData.Data(14,:));
     %outputSignal = filtfilt(b, a, outputSignal);
     inputSignal = double(timeSeriesData.Data(19,:));
     
@@ -38,6 +38,7 @@ for i_file = 4:6%length(mat_tile_list)
     
     % Compute the PSD of the output signal for comparison
     [pxxOutput, f] = pwelch(outputSignal, [], [], [], fs);
+    
 
     % Compute the coherence between input and output signals
     [Cxy, f] = mscohere(inputSignal, outputSignal, [], [], [], fs);
@@ -58,14 +59,14 @@ for i_file = 4:6%length(mat_tile_list)
     
     % Plot the Frequency Response Function (FRF)
     subplot(3,1,2);
-    plot(res_Men.f, 20*log10(abs(res_Men.FRF)));
+    plot(res_Men.f, abs(res_Men.FRF));
     hold on
     
   
     FRF_all(k,:) = 20*log10(abs(FRF));
     k = k +1;
 
-    title('Frequency Response Function (FRF)', 'Interpreter', 'latex','FontSize',14);
+    title('Frequency Response Function (FRF in disp)', 'Interpreter', 'latex','FontSize',14);
     xlabel('Freq (Hz)', 'Interpreter', 'latex','FontSize',14);
     ylabel('Magnitude', 'Interpreter', 'latex','FontSize',14);
     xlim([low_freq,high_freq])

@@ -5,6 +5,18 @@
     D,foundation_node,roty,0
     D,foundation_node,rotz,0
     ! Please apply the displacement on foundation_node
+    !
+    *IF,Solu_type, EQ, 5, then
+        D,foundation_node,ux,0
+        D,foundation_node,uy,0
+        D,foundation_node,uz,0
+    *ENDIF
+    !
+    *IF,Solu_type, EQ, 6, then
+        D,foundation_node,ux,0
+        D,foundation_node,uy,0
+        D,foundation_node,uz,0
+    *ENDIF
 *ELSE
     ! Not consider the SSI
     NSEL,S,NODE,,ground_node
@@ -12,5 +24,17 @@
     D,ground_node,roty,0
     D,ground_node,rotz,0
     ! Please apply the displacement on ground_node
+    !
+    *IF,Solu_type, EQ, 5, then
+        D,ground_node,ux,0
+        D,ground_node,uy,0
+        D,ground_node,uz,0
+    *ENDIF
+    !
+    *IF,Solu_type, EQ, 6, then
+        D,ground_node,ux,0
+        D,ground_node,uy,0
+        D,ground_node,uz,0
+    *ENDIF
 *ENDIF
 NSEL,ALL

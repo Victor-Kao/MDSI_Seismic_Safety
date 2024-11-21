@@ -9,27 +9,32 @@ dir_activate_1G2G = "D:\MDSI_project\DATA_GM_RawData\DATA_MENHIR_Alldata\Event_s
 
 mat_tile_list = Func_FindMatFiles(dir_activate_1G2G);
 fs = 1000;
-Nmodes = 4;
+Nmodes = 8;
 
 lowCutoffFreq = 4; % Lower cutoff frequency (40 Hz)
-highCutoffFreq = 22; % Upper cutoff frequency (60 Hz)
+highCutoffFreq = 100; % Upper cutoff frequency (60 Hz)
 filterOrder = 4; % Filter order
 
 
 %% Acc Data for 2 O.G. (Channel 15), first mode
-dir_activate_1G2G = "D:\MDSI_project\DATA_GM_RawData\DATA_ACC_Measure12032024\DATA_Hammer\Time_domain";
+dir_activate_1G2G = "D:\MDSI_project\DATA_GM_RawData\DATA_ACC_Measure12032024\DATA_Hammer\Time_domain_update";
 mat_tile_list = Func_FindMatFiles(dir_activate_1G2G);
 list_a = [10,11];
 fs = 1024;
 low_freq = 2;
-high_freq = 100;
+high_freq = 25;
 [b,a] = Func_FilterDesign(low_freq,high_freq,4,1024);
-i_file = 10;
+i_file = 7;
 
 load(mat_tile_list{i_file});
-S_1 = double(timeSeriesData.Data(10,:));
+%S_1 = double(timeSeriesData.Data(15,:));
+%S_2 = double(timeSeriesData.Data(14,:));
+%S_3 = double(timeSeriesData.Data(13,:));
+%S_4 = double(timeSeriesData.Data(3,:));
+
+S_1 = double(timeSeriesData.Data(12,:));
 S_2 = double(timeSeriesData.Data(11,:));
-S_3 = double(timeSeriesData.Data(12,:));
+S_3 = double(timeSeriesData.Data(10,:));
 S_4 = double(timeSeriesData.Data(9,:));
 
 S_1 = filtfilt(b, a, S_1);

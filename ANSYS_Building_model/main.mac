@@ -11,12 +11,12 @@ elem_size  = 0.4    ![m]
 
 
 ! SOLU setting
-Solu_type = 3       ! ANYTYPE: if 2 = Modal, 3 = Harmonic, 4 = transient
+Solu_type = 2       ! Solu_type: if 2 = Modal, 3 = Harmonic, 4 = transient, 5 = Hammer_testing_Full, 6 = Hammer_testing_MSUP
 Star_Freq = 0.001   ! [Hz]
-End_Freq  = 100      ! [Hz]
-Freq_Incr = 0.1     ! [Hz]  Only use for calculate num of step, however, the final num of step might be different due to auto-process
-N_modes   = 40      ! Only use for ANYTYPE = 2
-Damping_ratio = 0.05 
+End_Freq  = 50      ! [Hz]
+Freq_Incr = 0.5     ! [Hz]  Only use for calculate num of step, however, the final num of step might be different due to auto-process
+N_modes   = 40      ! Only use for Solu_typ = 2 and 6, if Solu_typ = 6, using small number of N_modes might lead to ROM due to less number of modal detected.
+Damping_ratio = 0.02 
 
 ! POST setting
 bool_write_result_csv = 1 ! if bool_write_result_csv = 1, The POST26 results will be written as csv and save in designated folder. 
@@ -43,6 +43,6 @@ bool_write_result_csv = 1 ! if bool_write_result_csv = 1, The POST26 results wil
 *ELSEIF,Solu_type,EQ,3
     /input,'POST\POST26','mac'
 *ELSE
-    !   
+    /input,'POST\POST26','mac'   
 *ENDIF
 

@@ -8,11 +8,13 @@ function result = Func_PSD_FRF_COH(inputSignal,outputSignal,window,noverlap,f,fs
     % Compute the Frequency Response Function (FRF)
     FRF = pxy ./ pxxInput;
     
+    
     % Compute the PSD of the output signal for comparison
     [pxxOutput, ~] = pwelch(outputSignal, window, noverlap, f, fs);
 
     % Compute the coherence between input and output signals
     [Cxy, freq] = mscohere(inputSignal, outputSignal, window, noverlap, f, fs);
+    FRF = FRF./ ((2 * pi * freq).^2);
 
     result = table(freq,pxxInput,pxxOutput,pxy,FRF,Cxy,'VariableNames', {'f','Pxx_in','Pxx_out','Pxy','FRF','Cxy'});
 

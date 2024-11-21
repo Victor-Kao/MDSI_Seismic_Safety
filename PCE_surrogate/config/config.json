@@ -1,0 +1,12 @@
+{
+    "X_path":"D:/MDSI_project/PCE_GSA_analysis/InputData/RNDNUM_building_all_uni_VAR_9_DOE_10000_SEED_2.mat",
+    "X_type":{"x1":"Uniform","x2":"Uniform", "x3":"Uniform","x4":"Uniform","x5":"Uniform","x6":"Uniform","x7":"Uniform","x8":"Uniform","x9":"Uniform","x10":"Uniform","x11":"Uniform","x12":"Uniform","x13":"Uniform","x14":"Uniform","x15":"Uniform","x16":"Uniform","x17":"Uniform","x18":"Uniform","x19":"Uniform","x20":"Uniform","x21":"Uniform","x22":"Uniform","x23":"Uniform","x24":"Uniform","x25":"Uniform","x26":"Uniform","x27":"Uniform","x28":"Uniform"},
+    "OrthPolyParams":{},
+    "Z_type": [],
+    "Solver": "HybridLAR",
+
+    "max_poly_degree":14,
+    "q_norm":[0.5,0.75,1.0],
+    "save_result_path":"D:/MDSI_project/PCE_surrogate/PredictionResult"
+	
+}

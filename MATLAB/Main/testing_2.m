@@ -10,10 +10,10 @@ dir_activate_1G2G = "D:\MDSI_project\DATA_GM_RawData\DATA_ACC_Measure12032024\DA
 mat_tile_list = Func_FindMatFiles(dir_activate_1G2G);
 list_a = [10,11];
 fs = 1024;
-cutoff_freq = 40;
+cutoff_freq = 100;
 [b,a] = Func_FilterDesign_highlow('high',4,4,1024);
 
-i_file = 7;
+i_file = 1;
 
 load(mat_tile_list{i_file});
 outputSignal = double(timeSeriesData.Data(9,:));
@@ -63,12 +63,17 @@ fit.C = fit_original.C(list);
 [resp,~] = freqresp(fit,f_1);
 error = sum(abs(abs(resp_1)-abs((resp))))
 
-
-plot(f_1,abs(H_1))
+H_1 = H_1./ ((2 * pi * f_1).^2);
+plot(f_1,imag(H_1))
 hold on
-plot(f_1,abs(resp_1))
-plot(f_1,abs(resp))
 
-figure
-plot(error_list)
+plot(res.f,imag(res.FRF))
+%plot(f_1,abs(resp))
+
+xlim([4,100])
+
+
+
+
+
 

@@ -303,6 +303,23 @@ ASEL,ALL
 CM,outside_wall,AREA
 
 
+!************************* Creating stair **************************!
+*IF,bool_inner,EQ,1,and, bool_stair,EQ,1,then
+    *DO, i_storey, 0, n_storeys-2, 1 
+        !
+        num_acc = ((n_storeys+1)*num_kp) + (i_storey*num_kp)
+        !
+        A, 36 +  ((i_storey+1)*num_kp), 1 + num_acc , 10 + num_acc , 57+((i_storey+1)*num_kp)
+        A,  1 +                num_acc, 2 + num_acc ,  9 + num_acc , 10 + num_acc
+        A,  2 +                num_acc, 3 + num_acc ,  8 + num_acc ,  9 + num_acc
+        A,  3 +                num_acc, 4 + num_acc ,  5 + num_acc ,  8 + num_acc
+        A,  5 +                num_acc, 6 + num_acc ,  7 + num_acc ,  8 + num_acc
+        A,  6+num_acc    , 38+((i_storey)*num_kp),  12 + num_acc, 7 + num_acc
+    *ENDDO
+    ASBA,9,121,,DELETE,KEEP
+    NUMMRG,KP
+*ENDIF
+! Combine the overlap area 
 
 
 
@@ -338,10 +355,10 @@ CM,outside_wall,AREA
     !
     ! 1 OG config
     !
-    A, 39+(1*num_kp), 40+(1*num_kp), 40+(2*num_kp), 39+(2*num_kp)
-    A, 40+(1*num_kp), 21+(1*num_kp), 21+(2*num_kp), 40+(2*num_kp)
-    A, 40+(1*num_kp), 10+(1*num_kp), 10+(2*num_kp), 40+(2*num_kp)
-    A,  3+(1*num_kp), 54+(1*num_kp), 54+(2*num_kp),  3+(2*num_kp)
+    !A, 39+(1*num_kp), 40+(1*num_kp), 40+(2*num_kp), 39+(2*num_kp)
+    !A, 40+(1*num_kp), 21+(1*num_kp), 21+(2*num_kp), 40+(2*num_kp)
+    !A, 40+(1*num_kp), 10+(1*num_kp), 10+(2*num_kp), 40+(2*num_kp)
+    !A,  3+(1*num_kp), 54+(1*num_kp), 54+(2*num_kp),  3+(2*num_kp)
     !
     ! 1, 2 OG config
     !
@@ -358,26 +375,6 @@ CM,outside_wall,AREA
 !APLOT
 !/PNUM,AREA,1
 
-
-
-
-!************************* Creating stair **************************!
-*IF,bool_inner,EQ,1,and, bool_stair,EQ,1,then
-    *DO, i_storey, 0, n_storeys-2, 1 
-        !
-        num_acc = ((n_storeys+1)*num_kp) + (i_storey*num_kp)
-        !
-        A, 36 +  ((i_storey+1)*num_kp), 1 + num_acc , 10 + num_acc , 57+((i_storey+1)*num_kp)
-        A,  1 +                num_acc, 2 + num_acc ,  9 + num_acc , 10 + num_acc
-        A,  2 +                num_acc, 3 + num_acc ,  8 + num_acc ,  9 + num_acc
-        A,  3 +                num_acc, 4 + num_acc ,  5 + num_acc ,  8 + num_acc
-        A,  5 +                num_acc, 6 + num_acc ,  7 + num_acc ,  8 + num_acc
-        A,  6+num_acc    , 38+((i_storey)*num_kp),  12 + num_acc, 7 + num_acc
-    *ENDDO
-    ASBA,9,152,,DELETE,KEEP
-    NUMMRG,KP
-*ENDIF
-! Combine the overlap area 
 
 
 
@@ -426,7 +423,7 @@ ASEL,ALL
         ASEL,S,LOC,X, 1.15/2
         ASEL,A,LOC,Y, (5.75+4.6)/2
         ASEL,U,AREA,,corridor_floor
-        ASEL,U,AREA,,152
+        ASEL,U,AREA,,121
         ASEL,U,AREA,,10
         CM,stair_floor,AREA
         ASEL,ALL

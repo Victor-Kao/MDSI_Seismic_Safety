@@ -1,5 +1,5 @@
 folder_name = 'D:/MDSI_project/ANSYS_Building_model/Results_Ansys';
-file_name = ['Disp_CH_15.csv'];
+file_name = ['DISP_CH_9_BOOL_IN_1_STA_1_SSI_0_VAR_DR_5.E-02.csv'];
 path = fullfile(folder_name,file_name );
 FRF = readtable(path);
 

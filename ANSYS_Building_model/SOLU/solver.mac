@@ -2,7 +2,25 @@
 /SOLU 
 *IF, Solu_type, EQ, 2, then
     ANTYPE,2
-    MODOPT,LANB,N_modes,Star_Freq,End_Freq, ,OFF   
+       
+    MODOPT,LANB,N_modes,Star_Freq,End_Freq, ,OFF
+    ! Assign BCs
+    /input,'PREP\BCs','mac'
+    *IF,bool_SSI,EQ,1,then
+        ! Consider the SSI
+        NSEL,S,NODE,,foundation_node
+        D,foundation_node,UX,0
+        D,foundation_node,UY,0
+        D,foundation_node,UZ,0
+    *ELSE
+        ! Not consider the SSI
+        NSEL,S,NODE,,ground_node
+        D,ground_node,UX,0
+        D,ground_node,UY,0
+        D,ground_node,UZ,0
+    *ENDIF
+    NSEL,ALL
+
     /STATUS,SOLU
 *elseif, Solu_type, EQ, 3, then
     !
@@ -46,6 +64,108 @@
         D,ground_node,UZ,%Impulse_disp%
     *ENDIF
     NSEL,ALL
+    !
+*elseif, Solu_type, EQ, 5, then
+    !
+    ! Define loading
+    !
+    *DIM,Impulse_disp,TABLE,2,2, ,FREQ
+    *SET,Impulse_disp(1,0), Star_Freq,End_Freq
+    *SET,Impulse_disp(1,1), 1000000000.0,1000000000.0
+    !
+    ! Visualized the loading 
+    !*VPLOt,Impulse_disp(1,0),Impulse_disp(1,1)
+    !
+    ANTYPE,3                    ! Harmonische Analyse		 
+    OUTRES,ALL,NONE		    	! To select specific results, deactivate all       
+    OUTRES,NSOL,1	            ! Activate node solution    		        
+    OUTRES,STRS 		   		! Activate stress solution			
+    OUTRES,EPEL 		    	! Activate strain solution  		
+    OUTRES,ESOL 		    	! Activate element solution			
+    OUTRES,RSOL 		    	! Activate reaction forces 		
+    !
+    NSEL,All  									
+    DMPRAT, Damping_ratio      
+    ! 
+    N_freq=((End_Freq-Star_Freq)/Freq_Incr)+1
+    HARFRQ,Star_Freq,End_Freq
+    NSUBST,N_freq,5*N_freq,N_freq
+    !
+    ! Assign BCs
+    /input,'PREP\BCs','mac'
+    *IF,bool_SSI,EQ,1,then
+        ! Consider the SSI 2031
+        !NSEL,S,NODE,,foundation_node
+        F,4152,FX,%Impulse_disp%
+        F,4152,FY,%Impulse_disp%
+        F,4152,FZ,%Impulse_disp%
+    *ELSE
+        ! Not consider the SSI
+        !NSEL,S,NODE,,ground_node
+        F,4152,FX,%Impulse_disp%
+        F,4152,FY,%Impulse_disp%
+        F,4152,FZ,%Impulse_disp%
+    *ENDIF
+    NSEL,ALL
+    !
+    !
+*elseif, Solu_type, EQ, 6, then
+    !
+    ! Define loading
+    !
+    *DIM,Impulse_disp,TABLE,2,2, ,FREQ
+    *SET,Impulse_disp(1,0), Star_Freq,End_Freq
+    *SET,Impulse_disp(1,1), 1000000000.0,1000000000.0
+    !
+    ! Visualized the loading 
+    !*VPLOt,Impulse_disp(1,0),Impulse_disp(1,1)
+    !
+    /input,'PREP\BCs','mac'
+    NSEL,ALL
+    !
+    ANTYPE, 2        ! MODE - FREQUENCY ANALYSIS
+    MODOPT, LANB,N_modes,Star_Freq,End_Freq
+    MXPAND,ALL,,,YES,,YES
+    OUTPR,,ALL
+    OUTRES,NSOL,1	            ! Activate node solution    
+    SOLVE
+    FINISH
+    !
+    /SOLU
+    ANTYPE,3                    ! Harmonische Analyse		
+    HROPT, MSUP                 ! MODE SUPERPOSITION 
+    !
+    NSEL,All  									
+    DMPRAT, Damping_ratio      
+    ! 
+    N_freq=((End_Freq-Star_Freq)/Freq_Incr)+1
+    HARFRQ,Star_Freq,End_Freq
+    NSUBST,N_freq,5*N_freq,N_freq
+    !
+    ! Assign BCs
+    /input,'PREP\BCs','mac'
+    *IF,bool_SSI,EQ,1,then
+        ! Consider the SSI 2031
+        !NSEL,S,NODE,,foundation_node
+        F,4152,FX,%Impulse_disp%
+        F,4152,FY,%Impulse_disp%
+        F,4152,FZ,%Impulse_disp%
+    *ELSE
+        ! Not consider the SSI
+        !NSEL,S,NODE,,ground_node
+        F,4152,FX,%Impulse_disp%
+        F,4152,FY,%Impulse_disp%
+        F,4152,FZ,%Impulse_disp%
+    *ENDIF
+    NSEL,ALL
+    SOLVE  
+    FINISH
+    !
+    !
+    /SOLU
+    allsel
+    expass, on      ! EXPANSION PASS
+    numexp, all
 *ENDIF
 SOLVE   
 FINISH
