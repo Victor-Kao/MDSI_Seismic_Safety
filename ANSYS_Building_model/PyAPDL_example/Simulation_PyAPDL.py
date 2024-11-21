@@ -1029,24 +1029,38 @@ class simulation_PyAPDL:
     def get_modal_info(self,modal_num):
         modal_freq       = self.mapdl.get('mode_num','MODE',modal_num,'FREQ')
         modal_dr         = self.mapdl.get('mode_num','MODE',modal_num,'DAMP')
-        modal_mass_x     = self.mapdl.get('mode_num','MODE',modal_num,'MODM','','DIREC','X')
-        modal_mass_y     = self.mapdl.get('mode_num','MODE',modal_num,'MODM','','DIREC','Y')
-        modal_mass_z     = self.mapdl.get('mode_num','MODE',modal_num,'MODM','','DIREC','Z')
-        modal_mass_rotx  = self.mapdl.get('mode_num','MODE',modal_num,'MODM','','DIREC','ROTX')
-        modal_mass_roty  = self.mapdl.get('mode_num','MODE',modal_num,'MODM','','DIREC','ROTY')
-        modal_mass_rotz  = self.mapdl.get('mode_num','MODE',modal_num,'MODM','','DIREC','ROTZ')
+        if modal_freq <= 0.001:
+            modal_sol = {
+                    'modal_num'         : modal_num,
+                    'modal_freq'        : 0,     
+                    'modal_dr'          : 0,      
+                    'modal_mass_x'      : 0,   
+                    'modal_mass_y'      : 0,   
+                    'modal_mass_z'      : 0,  
+                    'modal_mass_rotx'   : 0,
+                    'modal_mass_roty'   : 0,
+                    'modal_mass_rotz'   : 0,
+                    }
 
-        modal_sol = {
-                'modal_num'         : modal_num,
-                'modal_freq'        : modal_freq,     
-                'modal_dr'          : modal_dr,      
-                'modal_mass_x'      : modal_mass_x,   
-                'modal_mass_y'      : modal_mass_y,   
-                'modal_mass_z'      : modal_mass_z,  
-                'modal_mass_rotx'   : modal_mass_rotx,
-                'modal_mass_roty'   : modal_mass_roty,
-                'modal_mass_rotz'   : modal_mass_rotz,
-                }
+        else:
+            modal_mass_x     = self.mapdl.get('mode_num','MODE',modal_num,'MODM','','DIREC','X')
+            modal_mass_y     = self.mapdl.get('mode_num','MODE',modal_num,'MODM','','DIREC','Y')
+            modal_mass_z     = self.mapdl.get('mode_num','MODE',modal_num,'MODM','','DIREC','Z')
+            modal_mass_rotx  = self.mapdl.get('mode_num','MODE',modal_num,'MODM','','DIREC','ROTX')
+            modal_mass_roty  = self.mapdl.get('mode_num','MODE',modal_num,'MODM','','DIREC','ROTY')
+            modal_mass_rotz  = self.mapdl.get('mode_num','MODE',modal_num,'MODM','','DIREC','ROTZ')
+
+            modal_sol = {
+                    'modal_num'         : modal_num,
+                    'modal_freq'        : modal_freq,     
+                    'modal_dr'          : modal_dr,      
+                    'modal_mass_x'      : modal_mass_x,   
+                    'modal_mass_y'      : modal_mass_y,   
+                    'modal_mass_z'      : modal_mass_z,  
+                    'modal_mass_rotx'   : modal_mass_rotx,
+                    'modal_mass_roty'   : modal_mass_roty,
+                    'modal_mass_rotz'   : modal_mass_rotz,
+                    }
         return modal_sol
     
     def get_all_modal_info(self,N_modes_exp = None):
@@ -1061,11 +1075,14 @@ class simulation_PyAPDL:
         for i in range(N_modes_get):
             modal_num = i+1
             sol = self.get_modal_info(modal_num)
-            
             #print(f"     Modal number {sol['modal_num']}: freq = {sol['modal_freq']}, damping ratio = {sol['modal_dr']}, modal mass z = {sol['modal_mass_z']}")
+            if sol['modal_freq'] <= 0.001:
+                modal_num = modal_num -1
+                break
 
             all_modal_info[f'modal_info_{modal_num}'] = sol
 
+        all_modal_info['total_mode_num'] = modal_num
         post_time = time.time()
         print(f" Extract all modal information , duration {post_time -start_time:.4f} seconds.")
         return all_modal_info
