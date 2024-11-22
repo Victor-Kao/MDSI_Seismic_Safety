@@ -52,4 +52,4 @@ max_2 = max(abs(mode_shape_vector(9:16,2)));
 mode_shape_vector(1:8,4) = mode_shape_vector(1:8,2)./max_1;
 mode_shape_vector(9:16,4) = mode_shape_vector(9:16,2)./max_2;
 phi = mode_shape_vector;
-save(['D:/MDSI_project/MATLAB/Surrogate_main/FRF/mode_shape_test_',num2str(i_file),'.mat'], 'phi');
+%save(['D:/MDSI_project/MATLAB/Surrogate_main/FRF/mode_shape_test_',num2str(i_file),'.mat'], 'phi');

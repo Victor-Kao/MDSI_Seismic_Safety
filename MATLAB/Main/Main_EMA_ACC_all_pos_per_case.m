@@ -20,7 +20,7 @@ k = 1;
 figure
 sgtitle('EMA using Impact Hammer ', 'Interpreter', 'latex','FontSize',25)
 
-i_file = 13;
+i_file = 9;
 list_a = [1,2,4,5,6,7,8];
 for i_pos = 1:15%length(mat_tile_list)
     if ismember(i_pos, list_a)
@@ -49,7 +49,7 @@ for i_pos = 1:15%length(mat_tile_list)
     if ismember(i_pos,[9,10,11,12]) 
     subplot(2,1,1);
     % Plot the Frequency Response Function (FRF)
-    plot(res_Men.f, abs(res_Men.FRF),'DisplayName', ['ID:',num2str(i_pos)]);
+    plot(res_Men.f, imag(res_Men.FRF),'DisplayName', ['ID:',num2str(i_pos)]);
     hold on
     k = k +1;
     title('FRF in displacement 1.OG', 'Interpreter', 'latex','FontSize',14);
@@ -74,7 +74,7 @@ for i_pos = 1:15%length(mat_tile_list)
     freq_ = res_Men.f;
     real_ = real(res_Men.FRF);
     imag_ = imag(res_Men.FRF);
-    save(['D:/MDSI_project/MATLAB/Surrogate_main/FRF/FRF_test_',num2str(i_file),'_ch_',num2str(i_pos),'.mat'], 'freq_', 'real_', 'imag_');
+    %save(['D:/MDSI_project/MATLAB/Surrogate_main/FRF/FRF_test_',num2str(i_file),'_ch_',num2str(i_pos),'.mat'], 'freq_', 'real_', 'imag_');
 end
 
 

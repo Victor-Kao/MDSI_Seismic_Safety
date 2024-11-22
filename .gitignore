@@ -10,5 +10,6 @@
 /PCE_surrogate/InputData/Realization
 /PCE_surrogate/InputData/Realization_frf
 /PCE_surrogate/InputData/Realization_frf_noSSI
+/PCE_surrogate/InputData/Realization_frf_noSSI_ex221
 
 *.mat
