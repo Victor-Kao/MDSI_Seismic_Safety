@@ -16,7 +16,7 @@ high_freq = 100;
 [b,a] = Func_FilterDesign(low_freq,high_freq,4,1024);
 
 
-i_file = 13;
+i_file = 1;
 list_a = [9,10,11,12,3,13,14,15];
 mode_shape_vector = zeros(16,4);
 for i = 1:8%length(mat_tile_list)
@@ -52,4 +52,4 @@ max_2 = max(abs(mode_shape_vector(9:16,2)));
 mode_shape_vector(1:8,4) = mode_shape_vector(1:8,2)./max_1;
 mode_shape_vector(9:16,4) = mode_shape_vector(9:16,2)./max_2;
 phi = mode_shape_vector;
-%save(['D:/MDSI_project/MATLAB/Surrogate_main/FRF/mode_shape_test_',num2str(i_file),'.mat'], 'phi');
+save(['D:/MDSI_project/MATLAB/Surrogate_main/FRF/mode_shape_test_',num2str(i_file),'.mat'], 'phi');

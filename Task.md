@@ -177,3 +177,9 @@
 
 
 
+- Finite Element Model Updating in Bridge Structures Using Kriging Model and Latin Hypercube Sampling Method
+- Swarm Intelligent Optimization Conjunction with Kriging Model for Bridge Structure Finite Element Model Updating
+
+
+
+

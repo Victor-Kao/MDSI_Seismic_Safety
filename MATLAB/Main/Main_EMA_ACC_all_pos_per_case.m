@@ -20,7 +20,7 @@ k = 1;
 figure
 sgtitle('EMA using Impact Hammer ', 'Interpreter', 'latex','FontSize',25)
 
-i_file = 9;
+i_file =1;
 list_a = [1,2,4,5,6,7,8];
 for i_pos = 1:15%length(mat_tile_list)
     if ismember(i_pos, list_a)
@@ -57,7 +57,7 @@ for i_pos = 1:15%length(mat_tile_list)
     ylabel('Magnitude', 'Interpreter', 'latex','FontSize',14);
     xlim([low_freq,high_freq])
     legend('show');  % Show legend
-    yline(0)
+    %yline(0)
     else
     subplot(2,1,2);
     plot(res_Men.f, imag(res_Men.FRF),'DisplayName', ['ID:',num2str(i_pos)]);
@@ -68,7 +68,7 @@ for i_pos = 1:15%length(mat_tile_list)
     ylabel('Magnitude', 'Interpreter', 'latex','FontSize',14);
     xlim([low_freq,high_freq])
     legend('show');  % Show legend
-    yline(0)
+    %yline(0)
     end
     
     freq_ = res_Men.f;

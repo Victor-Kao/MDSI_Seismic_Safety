@@ -9,7 +9,10 @@
 /ANSYS_Building_model/Results_Ansys
 /PCE_surrogate/InputData/Realization
 /PCE_surrogate/InputData/Realization_frf
+/PCE_surrogate/InputData/Realization_frf_ex221
+/PCE_surrogate/InputData/Realization_frf_ex220
 /PCE_surrogate/InputData/Realization_frf_noSSI
 /PCE_surrogate/InputData/Realization_frf_noSSI_ex221
+/PCE_surrogate/InputData/Realization_frf_noSSI_ex220
 
 *.mat
