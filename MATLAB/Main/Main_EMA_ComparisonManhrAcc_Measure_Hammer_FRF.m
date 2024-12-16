@@ -45,6 +45,7 @@ for i = 1:size_table(1)
     %az_psd_inter = interp1(freq_psd,az_psd,Acc_freq);
     Men_signal_inter = Men_signal_inter_r + 1i*Men_signal_inter_i;
 
+    % ID 9 indicates the channel at the same position as Menhir device.
     Acc_output = Acc_data{1}.timeSeriesData.Data(9,:);
     Acc_output = filtfilt(b, a, double(Acc_output));
     %Acc_input = filtfilt(b, a, double(Acc_input));
@@ -55,6 +56,9 @@ for i = 1:size_table(1)
     FRF_Acc_f(1)= 0 ;
     Acc_cut_f = FRF_Acc.f(FRF_Acc.f<=50);
     FRF_Menhir = Func_PSD_FRF_COH_freq(Acc_freq,Acc_signal,Men_signal_inter);
+
+    %% Transfer from Vel to Disp
+    FRF_Menhir.FRF = FRF_Menhir.FRF./ (1i*(2 * pi * FRF_Menhir.f));
 
     figure
     plot(Acc_cut_f,abs(FRF_Acc_f)/max(abs(FRF_Acc_f)),'r');

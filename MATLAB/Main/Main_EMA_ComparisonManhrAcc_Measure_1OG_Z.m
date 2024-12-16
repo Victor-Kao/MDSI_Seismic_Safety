@@ -25,7 +25,7 @@ for i_file = 1:13
     outputSignal = double(timeSeriesData.Data(9,:));
     outputSignal = filtfilt(b, a, outputSignal);
     inputSignal = double(timeSeriesData.Data(19,:));
-    Acc_f = Func_FFT_half(inputSignal,fs);
+    Acc_f = Func_FFT_half(inputSignal,[],fs);
     Acc_signal = Acc_f.s(Acc_f.f<=500);
     Acc_freq = Acc_f.f(Acc_f.f<=500);
     res_Acc = Func_PSD_FRF_COH(inputSignal,outputSignal,[],[],[],1024);
@@ -36,10 +36,12 @@ for i_file = 1:13
     mat_tile_list = Func_FindMatFiles(dir_activate_1G2G);
     fs = 1000;
     load(mat_tile_list{i_file});
-    az = diff(data_T.Z_mm_s)/(1/fs); % WARNING! Identify based on Velocity not ACC here 
+    az = data_T.Z_mm_s; % WARNING! Identify based on Velocity not ACC here 
     %az = data_T.Z_mm_s;
     az = filtfilt(b, a, az);
     [az_psd,az_freq] = pwelch(az,[],[],[],1000);
+    %az_psd = az_psd./(1i*2*pi*az_freq);
+    
     
     %% FRF
     %Menhir_f = Func_FFT_half(transpose(az),1000);
@@ -65,8 +67,9 @@ for i_file = 1:13
     %plot(res_Men.f, abs(res_Men.FRF)/max(abs(res_Men.FRF)));
     plot(az_freq,az_psd/max(abs(az_psd)),'r')
     hold on 
+    res_Acc.FRF = res_Acc.FRF.*(1i*2*pi*res_Acc.f);
     plot(res_Acc.f, abs(res_Acc.FRF)/max(abs(res_Acc.FRF)),'b');
-    legend('Menhir Signal','Acc Signal');
+    legend('Menhir Signal (Veloctiy)','Acc Signal (Veloctiy)');
     title('Frequency resenponse Function (FRF)');
     xlabel('Frequency (Hz)');
     ylabel('Magnitude');
