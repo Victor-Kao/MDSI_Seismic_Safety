@@ -1,24 +1,26 @@
-clear;
-clc;
-close all;
+% Taylor Series Approximation for Pi with Convergence Plot
+clear; clc;
 
-load("Acc_1G_Z_SSICOV_damp.mat");
-load("Acc_1G_Z_SSICOV_freq.mat");
+% Define range of terms
+max_terms = 100000; % Maximum number of terms
+pi_approximations = zeros(1, max_terms); % Preallocate array for approximations
 
-x_axis = [];
-y_axis = [];
-z_axis = [];
-
-list_a = [10,11];
-k = 1;
-for i_file = 1:15
-    if ismember(i_file, list_a)
-        continue
-    end
-    x_axis = [x_axis , All_F_res{i_file}];
-    y_axis = [y_axis , All_F_damp{i_file}];
-    z_axis = [z_axis , k*ones(1,length(All_F_res{i_file}))];
-    k = k+1;
+% Compute approximations for each number of terms
+for N = 1:max_terms
+    % Calculate the approximation of Pi using N terms
+    pi_approx = 4 * sum((-1).^(0:N-1) ./ (2*(0:N-1) + 1));
+    pi_approximations(N) = pi_approx;
 end
 
-scatter3(x_axis,y_axis,z_axis)
+% Plot the results
+figure;
+plot(1:max_terms, pi_approximations, 'b-', 'LineWidth', 1);
+hold on;
+yline(pi, 'r--', 'LineWidth', 1.5, 'DisplayName', 'True Value of \pi');
+xlabel('Number of Terms');
+ylabel('Approximation of \pi');
+title('Convergence of Pi Approximation using Taylor Series');
+legend('Approximation', 'True Value of \pi');
+grid on;
+
+
